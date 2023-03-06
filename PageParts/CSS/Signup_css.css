@@ -1,0 +1,43 @@
+html,
+body {
+  height: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: #48B924;
+}
+
+.bg-image {
+    background-image: url('https://www.pixelstalk.net/wp-content/uploads/2016/04/Photos-download-fishing-Wallpaper-HD.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100%;
+  }
+
+a:hover {
+  color: #328b16;
+}
+
+.container {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-signup {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 30px;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.form-control {
+  width: 100%;
+}
+
+.form-control:focus {
+  border-color: #48B924;
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}

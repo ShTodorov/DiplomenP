@@ -1251,9 +1251,14 @@ select option
 {
 	h2{font-size: 24px;}
 	p{font-size: 13px;}
-	.top_bar
-	{
+	.top_bar_contact{
 		display: none;
+	}
+	.top_bar{
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+
 	}
 	.logo_container, .wishlist_cart
 	{
