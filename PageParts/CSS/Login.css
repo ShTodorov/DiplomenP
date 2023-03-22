@@ -8,10 +8,6 @@ a {
   color: #48B924;
 }
 
-a:hover {
-  color: #328b16;
-}
-
 .bg-image {
   background-image: url('https://www.pixelstalk.net/wp-content/uploads/2016/04/Photos-download-fishing-Wallpaper-HD.jpg');
   background-size: cover;
@@ -19,15 +15,14 @@ a:hover {
   height: 100%;
 }
 
-.container {
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+a:hover {
+  color: #328b16;
 }
 
+
+
 .form-signin {
-  background-color: #f2f2f2;
+  background-color: rgba(255, 255, 255, 0.8);
   padding: 30px;
   border-radius: 5px;
   width: 100%;

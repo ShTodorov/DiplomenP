@@ -10,6 +10,35 @@
 </head>
 <body>
 
+  <style>
+
+    @media only screen and (max-width: 575px){
+
+      .px-4{
+        width: 100% !important;
+        padding: 0 !important;
+      }
+
+    }
+
+    @media only screen and (max-width: 519px){
+
+      .col-lg-12{
+        padding: 0 !important;
+      }
+
+    }
+
+    @media only screen and (max-width: 425px){
+
+      .price{
+        display: none;
+      }
+
+    }
+
+  </style>
+
     <div class="px-4 px-lg-0">
 
         <div class="pb-5 mt-2">
@@ -26,7 +55,7 @@
                         <th scope="col" class="border-0 bg-light">
                           <div class="p-2 px-3 text-uppercase">Product</div>
                         </th>
-                        <th scope="col" class="border-0 bg-light">
+                        <th scope="col" class="border-0 bg-light price">
                           <div class="py-2 text-uppercase">Price</div>
                         </th>
                         <th scope="col" class="border-0 bg-light">
@@ -43,41 +72,20 @@
                           <div class="p-2">
                             <img src="https://bootstrapious.com/i/snippets/sn-cart/product-1.jpg" alt="" width="70" class="img-fluid rounded shadow-sm">
                             <div class="ml-3 d-inline-block align-middle">
-                              <h5 class="mb-0"> <a href="#" class="text-dark d-inline-block align-middle">Timex Unisex Originals</a></h5><span class="text-muted font-weight-normal font-italic d-block">Category: Watches</span>
+                              <h5 class="mb-0"> <a href="#" class="text-dark d-inline-block align-middle">Timex Unisex Originals</a></h5>
+                              <span class="text-muted font-weight-normal font-italic d-block">Category: Watches</span>
                             </div>
                           </div>
                         </th>
-                        <td class="border-0 align-middle"><strong>$79.00</strong></td>
-                        <td class="border-0 "><button type="button" class="btn btn-light p-1">+</button><input class="form-control text-center" type="num" value="1" style="width: 3rem;"><button type="button" class="btn btn-light p-1">-</button></td>
-                        <td class="border-0 align-middle"><a href="#" class="text-dark"><i class="fa fa-trash"></i></a></td>
-                      </tr>
-                      <tr>
-                        <th scope="row">
-                          <div class="p-2"> 
-                            <img src="https://bootstrapious.com/i/snippets/sn-cart/product-2.jpg" alt="" width="70" class="img-fluid rounded shadow-sm">
-                            <div class="ml-3 d-inline-block align-middle">
-                              <h5 class="mb-0"><a href="#" class="text-dark d-inline-block">Lumix camera lense</a></h5><span class="text-muted font-weight-normal font-italic">Category: Electronics</span>
-                            </div>
-                          </div>
-                        </th>
-                        <td class="align-middle"><strong>$79.00</strong></td>
-                        <td class="align-middle"><strong>3</strong></td>
-                        <td class="align-middle"><a href="#" class="text-dark"><i class="fa fa-trash"></i></a>
+                        <td class="border-0 align-middle price"><strong>$79.00</strong></td>
+                        <td class="border-0 ">
+                          <button type="button" style="width: 20px; margin-left: 13px;" class="btn btn-light p-1">+</button>
+                          <input class="form-control text-center" type="num" value="1" style="width: 3rem;">
+                          <button type="button" style="width: 20px; margin-left: 13px;" class="btn btn-light p-1">-</button>
                         </td>
+                        <td class="border-0 align-middle"><button type="button" class="btn btn-light"><i class="fa fa-trash"></i></button></td>
                       </tr>
-                      <tr>
-                        <th scope="row">
-                          <div class="p-2">
-                            <img src="https://bootstrapious.com/i/snippets/sn-cart/product-3.jpg" alt="" width="70" class="img-fluid rounded shadow-sm">
-                            <div class="ml-3 d-inline-block align-middle">
-                              <h5 class="mb-0"> <a href="#" class="text-dark d-inline-block">Gray Nike running shoe</a></h5><span class="text-muted font-weight-normal font-italic">Category: Fashion</span>
-                            </div>
-                          </div>
-                          <td class="align-middle"><strong>$79.00</strong></td>
-                          <td class="align-middle"><strong>3</strong></td>
-                          <td class="align-middle"><a href="#" class="text-dark"><i class="fa fa-trash"></i></a>
-                          </td>
-                      </tr>
+                      
                     </tbody>
                   </table>
                 </div>
