@@ -1,7 +1,3 @@
-main{
-    z-index: -1;
-}
-
 /*
 	Body and general stuff
 */
@@ -270,6 +266,11 @@ section {
     display: inline-block;
 }
 
+.top_bar_user {
+    height: 100%;
+    width: 100%;
+}
+
 .top_bar_contact_item {
     font-size: 16px;
     font-weight: 300;
@@ -415,6 +416,8 @@ section {
 .user_icon {
     display: inline-block;
     margin-right: 7px;
+    margin-bottom: auto;
+    margin-top: auto;
     -webkit-transform: translateY(-2px);
     -moz-transform: translateY(-2px);
     -ms-transform: translateY(-2px);
@@ -1196,6 +1199,7 @@ select {
 
     .header_search {
         height: 50px;
+        margin-bottom: 10px;
     }
 
     .custom_dropdown {
@@ -1266,9 +1270,7 @@ select {
 }
 
 @media only screen and (max-width: 767px) {
-    .header_search {
-        display: none;
-    }
+    
 
     .page_menu_search {
         display: block;
@@ -1288,8 +1290,14 @@ select {
         font-size: 13px;
     }
 
-    .top_bar {
+    .top_bar_contact {
         display: none;
+    }
+
+    .top_bar {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
     }
 
     .logo_container, .wishlist_cart {
@@ -1330,10 +1338,6 @@ select {
         display: none;
     }
 
-    .cart_text {
-        display: none;
-    }
-
         .wishlist_text a,
         .cart_text a {
             font-size: 14px;
@@ -1369,9 +1373,7 @@ select {
         margin-left: 0px;
     }
 
-    .header_search {
-        display: none;
-    }
+    
 
     .main_nav {
         width: calc(100% + 30px);

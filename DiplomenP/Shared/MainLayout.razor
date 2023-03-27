@@ -12,21 +12,20 @@
 
         <div class="top_bar">
             <div class="container">
-                    <div class="col d-flex flex-row justify-content-between">
+                <div class="col d-flex flex-row justify-content-between">
+                    <div class="top_bar_contact">
                         <div class="col d-flex flex-row">
-                            <div class="top_bar_contact_item"><div class="top_bar_icon"><img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1560918577/phone.png" alt=""></div>+91 9823 132 111</div>
-                            <div class="top_bar_contact_item"><div class="top_bar_icon"><img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1560918597/mail.png" alt=""></div><a href="mailto:fastsales@gmail.com">contact@bbbootstrap.com</a></div>
-                        </div>
-                        <div class="top_bar_content ml-auto">
-                            <div class="top_bar_menu">
-                            </div>
-                            <div class="top_bar_user">
-                                <div class="user_icon"><img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1560918647/user.svg" alt=""></div>
-                                <div><a href="#">Register</a></div>
-                                <div><a href="#">Sign in</a></div>
-                            </div>
+                            <div class="top_bar_contact_item"><div class="top_bar_icon"><img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1560918577/phone.png" alt=""></div>+359 88 757 6390</div>
+                            <div class="top_bar_contact_item"><div class="top_bar_icon"><img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1560918597/mail.png" alt=""></div><a href="https://mail.google.com/">contact@bbbootstrap.com</a></div>
                         </div>
                     </div>
+                    <div class="top_bar_content">
+                        <div class="col d-flex flex-row mt-auto mb-auto h-100 w-100">
+                            <div class="user_icon"><img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1560918647/user.svg" alt="lg_icon"></div>
+                            <LoginDisplay />
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -50,20 +49,6 @@
                                 <div class="header_search_form_container">
                                     <form action="#" class="header_search_form clearfix">
                                         <input type="search" required="required" class="header_search_input" placeholder="Search for products...">
-                                        <div class="custom_dropdown" style="display: none;">
-                                            <div class="custom_dropdown_list">
-                                                <span class="custom_dropdown_placeholder clc">All Categories</span>
-                                                <i class="fas fa-chevron-down"></i>
-                                                <ul class="custom_list clc">
-                                                    <li><a class="clc" href="#">All Categories</a></li>
-                                                    <li><a class="clc" href="#">Computers</a></li>
-                                                    <li><a class="clc" href="#">Laptops</a></li>
-                                                    <li><a class="clc" href="#">Cameras</a></li>
-                                                    <li><a class="clc" href="#">Hardware</a></li>
-                                                    <li><a class="clc" href="#">Smartphones</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
                                         <button type="submit" class="header_search_button trans_300" value="Submit"><img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1560918770/search.png" alt="search"></button>
                                     </form>
                                 </div>
@@ -81,7 +66,7 @@
                                         <div class="cart_count"><span>3</span></div>
                                     </div>
                                     <div class="cart_content">
-                                        <div class="cart_text"><a href="#">Cart</a></div>
+                                        <div class="cart_text"><a href="shopping_cart">Cart</a></div>
                                         <div class="cart_price">$185</div>
                                     </div>
                                 </div>
@@ -97,9 +82,6 @@
     </header>
 
 </div>
-
-
-
 
 <main class="container main">
     @Body

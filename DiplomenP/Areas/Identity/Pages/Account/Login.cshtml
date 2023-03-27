@@ -1,0 +1,142 @@
+﻿@page
+@model LoginModel
+
+<style>
+
+    html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
+.container{
+    height: 82%;
+    max-width: 78%;
+}
+
+.pb-1 {
+    height: 100%;
+    width: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: #48B924;
+}
+
+.bg-image {
+  background-image: url('https://www.pixelstalk.net/wp-content/uploads/2016/04/Photos-download-fishing-Wallpaper-HD.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+}
+
+a:hover {
+  color: #328b16;
+}
+
+.form-floating{
+    margin-bottom: 8px;
+}
+
+.form-signin {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 30px;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.form-control {
+  width: 100%;
+}
+
+.form-control:focus {
+  border-color: #48B924;
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+    .footer {
+        overflow: visible;
+        position: relative;
+    }
+
+</style>
+
+<style type="text/css" media="screen and (max-width:575px)">
+    .container {
+        max-width: 100%;
+    }
+</style>
+
+    <div class="container-fluid bg-image">
+        <div class="row justify-content-center align-items-center h-100">
+            <div class="col-sm-8 col-md-6 col-lg-4">
+                <form class="form-signin" id="account" method="post">
+                    <h1 class="h3 mb-3">Влизане в профил</h1>
+                    <hr />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-floating">
+                        <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
+                        <label asp-for="Input.Email" class="form-label"></label>
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating">
+                        <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" />
+                        <label asp-for="Input.Password" class="form-label"></label>
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                    <div>
+                        <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary mb-2">Log in</button>
+                    </div>
+                    <div>
+                        <p>
+                            <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                        </p>
+                        <p>
+                            <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    @*<div class="col-md-6 col-md-offset-2">
+        <section>
+            <h3>Use another service to log in.</h3>
+            <hr />
+            @{
+                if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                {
+                    <div>
+                        <p>
+                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
+                            about setting up this ASP.NET application to support logging in via external services</a>.
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                        <div>
+                            <p>
+                                @foreach (var provider in Model.ExternalLogins!)
+                                {
+                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                }
+                            </p>
+                        </div>
+                    </form>
+                }
+            }
+        </section>
+    </div>
+    *@
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

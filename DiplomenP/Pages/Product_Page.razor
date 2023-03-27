@@ -1,0 +1,46 @@
+﻿@page "/product_page"
+
+<PageTitle></PageTitle>
+
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+
+            <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="https://www.smgeurope.com/media/catalog/product/cache/6b020859e7bf60a7f69e79cdf8e850fb/6/4/649-1445912_main_1.jpg" alt="product"></div>
+            
+            <div class="col-md-6">
+
+                <div class="small mb-1">Category: Rod</div>
+
+                <h1 class="display-6 fw-bolder">Shop item template</h1>
+
+                <div class="mb-4">
+                    <p class="fs-3">40 лева.</p>
+                </div>
+
+                <p class="lead m-1">Описание:</p>
+
+                <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium at dolorem quidem modi. Nam sequi consequatur obcaecati excepturi alias magni, accusamus eius blanditiis delectus ipsam minima ea iste laborum vero?</p>
+                
+                <div class="d-flex">
+                    <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem; margin-right: 10px;">
+                    <button class="btn btn-outline-dark flex-shrink-0" type="button" @onclick="btnOpenLink_Click">
+                            <i class="bi-cart-fill me-1"></i>
+                            Add to cart
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+@code {
+
+    private void btnOpenLink_Click()
+    {
+        string url = "shopping_cart";
+        System.Diagnostics.Process.Start(url);
+    }
+}
