@@ -27,7 +27,7 @@ namespace DiplomenP.Models
         public int ProductCount { get; set; }
 
         [Display(Name = "Image")]
-        public byte[] Image { get; set; }
+        public string Image { get; set; }
 
         [Display(Name = "Description")]
         [StringLength(500, ErrorMessage = "Description cannot be longer than 500 characters")]
@@ -37,9 +37,7 @@ namespace DiplomenP.Models
         [StringLength(50, ErrorMessage = "Brand cannot be longer than 50 characters")]
         public string Brand { get; set; }
 
-        [Display(Name = "SKU")]
-        [StringLength(50, ErrorMessage = "SKU cannot be longer than 50 characters")]
-        public string SKU { get; set; }
+        public Cart Cart { get; set; }
     }
 
 }

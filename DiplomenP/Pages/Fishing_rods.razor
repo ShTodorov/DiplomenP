@@ -1,23 +1,209 @@
-﻿@page "/fishing_rods"
+﻿@using DiplomenP.Data
+@using DiplomenP.Interfaces;
+@using DiplomenP.Models;
+@page "/fishing_rods"
 
 <PageTitle>Въдици</PageTitle>
 
+@code {
+
+    [Inject]
+    private IProductService ProductService { get; set; }
+
+    private List<Product> products = new List<Product>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = ProductService.GetProducts();
+    }
+
+}
+
 <h2>Шарански въдици</h2>
 
-@* @foreach *@
+<div class="container mydiv">
+    <div class="row d-flex">
+
+        @foreach (var product in products)
+            {
+
+            if(product.Type == "Carp_rod")
+            {
+                <div class="col-md-6 col-lg-4 col-xl-3">
+
+                    <!-- bbb_deals -->
+
+                    <div class="bbb_deals">
+                        <div class="bbb_deals_slider_container">
+                            <div class=" bbb_deals_item">
+                                <div class="bbb_deals_image"><img src="https://www.eagleclaw.com/pub/media/catalog/product/cache/8b827f92d40f53910595a661ebde8346/e/c/ec35s63mlf1.jpg" alt="product.img"></div>
+                                <div class="bbb_deals_content">
+                                    <div class="bbb_deals_info_line d-flex flex-row justify-content-between">
+                                        <div class="bbb_deals_item_category text-secondary">@product.Type</div>
+                                        <div class="bbb_deals_item_category text-secondary">@product.Brand</div>
+                                    </div>
+                                    <div class="bbb_deals_info_line">
+                                        <div class="bbb_deals_item_name"><a href="product_page">@product.ProductName</a></div>
+                                    </div>
+                                    <div class="bbb_deals_info_line d-flex flex-row justify-content-start">
+                                        <div class="bbb_deals_item_price ml-auto">@product.Price лв.</div>
+                                    </div>
+                                    <div class="available">
+                                        <div class="available_line d-flex flex-row justify-content-start">
+                                            <div class="available_title">Available: <span>@product.ProductCount</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            }
+        
+        }
+
+    </div>
+</div>
+
 
 <h2>Тролинг въдици</h2>
 
+<div class="container mydiv">
+    <div class="row d-flex">
+
+        @foreach (var product in products)
+        {
+
+            if(product.Type == "Trolling_rod")
+            {
+                <div class="col-md-6 col-lg-4 col-xl-3">
+
+                    <!-- bbb_deals -->
+
+                    <div class="bbb_deals">
+                        <div class="bbb_deals_slider_container">
+                            <div class=" bbb_deals_item">
+                                <div class="bbb_deals_image"><img src="https://www.eagleclaw.com/pub/media/catalog/product/cache/8b827f92d40f53910595a661ebde8346/e/c/ec35s63mlf1.jpg" alt="product.img"></div>
+                                <div class="bbb_deals_content">
+                                    <div class="bbb_deals_info_line d-flex flex-row justify-content-between">
+                                        <div class="bbb_deals_item_category text-secondary">@product.Type</div>
+                                        <div class="bbb_deals_item_category text-secondary">@product.Brand</div>
+                                    </div>
+                                    <div class="bbb_deals_info_line">
+                                        <div class="bbb_deals_item_name"><a href="product_page">@product.ProductName</a></div>
+                                    </div>
+                                    <div class="bbb_deals_info_line d-flex flex-row justify-content-start">
+                                        <div class="bbb_deals_item_price ml-auto">@product.Price лв.</div>
+                                    </div>
+                                    <div class="available">
+                                        <div class="available_line d-flex flex-row justify-content-start">
+                                            <div class="available_title">Available: <span>@product.ProductCount</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            }
+
+        }
+
+    </div>
+</div>
+
 <h2>Спининг въдици</h2>
 
-@* @foreach *@
+<div class="container mydiv">
+    <div class="row d-flex">
 
+        @foreach (var product in products)
+        {
+
+            if (product.Type == "Spinning_rod")
+            {
+                <div class="col-md-6 col-lg-4 col-xl-3">
+
+                    <!-- bbb_deals -->
+
+                    <div class="bbb_deals">
+                        <div class="bbb_deals_slider_container">
+                            <div class=" bbb_deals_item">
+                                <div class="bbb_deals_image"><img src="https://www.eagleclaw.com/pub/media/catalog/product/cache/8b827f92d40f53910595a661ebde8346/e/c/ec35s63mlf1.jpg" alt="product.img"></div>
+                                <div class="bbb_deals_content">
+                                    <div class="bbb_deals_info_line d-flex flex-row justify-content-between">
+                                        <div class="bbb_deals_item_category text-secondary">@product.Type</div>
+                                        <div class="bbb_deals_item_category text-secondary">@product.Brand</div>
+                                    </div>
+                                    <div class="bbb_deals_info_line">
+                                        <div class="bbb_deals_item_name"><a href="product_page">@product.ProductName</a></div>
+                                    </div>
+                                    <div class="bbb_deals_info_line d-flex flex-row justify-content-start">
+                                        <div class="bbb_deals_item_price ml-auto">@product.Price лв.</div>
+                                    </div>
+                                    <div class="available">
+                                        <div class="available_line d-flex flex-row justify-content-start">
+                                            <div class="available_title">Available: <span>@product.ProductCount</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            }
+
+        }
+
+    </div>
+</div>
 
 <h2>Мухарски въдици</h2>
 
-@* @foreach *@
+<div class="container mydiv">
+    <div class="row d-flex">
 
+        @foreach (var product in products)
+        {
 
-@code {
+            if (product.Type == "Fly_rod")
+            {
+                <div class="col-md-6 col-lg-4 col-xl-3">
 
-}
+                    <!-- bbb_deals -->
+
+                    <div class="bbb_deals">
+                        <div class="bbb_deals_slider_container">
+                            <div class=" bbb_deals_item">
+                                <div class="bbb_deals_image"><img src="https://www.eagleclaw.com/pub/media/catalog/product/cache/8b827f92d40f53910595a661ebde8346/e/c/ec35s63mlf1.jpg" alt="product.img"></div>
+                                <div class="bbb_deals_content">
+                                    <div class="bbb_deals_info_line d-flex flex-row justify-content-between">
+                                        <div class="bbb_deals_item_category text-secondary">@product.Type</div>
+                                        <div class="bbb_deals_item_category text-secondary">@product.Brand</div>
+                                    </div>
+                                    <div class="bbb_deals_info_line">
+                                        <div class="bbb_deals_item_name"><a href="product_page">@product.ProductName</a></div>
+                                    </div>
+                                    <div class="bbb_deals_info_line d-flex flex-row justify-content-start">
+                                        <div class="bbb_deals_item_price ml-auto">@product.Price лв.</div>
+                                    </div>
+                                    <div class="available">
+                                        <div class="available_line d-flex flex-row justify-content-start">
+                                            <div class="available_title">Available: <span>@product.ProductCount</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            }
+
+        }
+
+    </div>
+</div>

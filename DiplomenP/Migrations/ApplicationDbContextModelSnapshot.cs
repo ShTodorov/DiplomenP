@@ -24,105 +24,70 @@ namespace DiplomenP.Migrations
 
             modelBuilder.Entity("DiplomenP.Models.Cart", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CartId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartId"), 1L, 1);
 
-                    b.Property<string>("CustomerId")
+                    b.Property<string>("CartCustomerId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("CartProductId")
+                        .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("CartId");
 
-                    b.HasIndex("CustomerId")
+                    b.HasIndex("CartCustomerId")
+                        .IsUnique();
+
+                    b.HasIndex("CartProductId")
                         .IsUnique();
 
                     b.ToTable("Carts");
                 });
 
-            modelBuilder.Entity("DiplomenP.Models.CartItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("CartId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CustomerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CartId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("CartItems");
-                });
-
             modelBuilder.Entity("DiplomenP.Models.Order", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("OrderId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"), 1L, 1);
 
-                    b.Property<string>("CustomerId")
+                    b.Property<string>("Adress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OrderCartId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("OrderCustomerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<double>("TotalAmount")
+                    b.Property<string>("OrderDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PhoneNumber")
+                        .HasColumnType("int");
+
+                    b.Property<double>("TotalOrderPrice")
                         .HasColumnType("float");
 
-                    b.HasKey("Id");
+                    b.HasKey("OrderId");
+
+                    b.HasIndex("OrderCartId")
+                        .IsUnique();
+
+                    b.HasIndex("OrderCustomerId")
+                        .IsUnique();
 
                     b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("DiplomenP.Models.OrderItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("DiplomenP.Models.Product", b =>
@@ -143,9 +108,9 @@ namespace DiplomenP.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<byte[]>("Image")
+                    b.Property<string>("Image")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -154,11 +119,6 @@ namespace DiplomenP.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ProductName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("SKU")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -181,9 +141,6 @@ namespace DiplomenP.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CartId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -194,14 +151,6 @@ namespace DiplomenP.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -388,51 +337,40 @@ namespace DiplomenP.Migrations
 
             modelBuilder.Entity("DiplomenP.Models.Cart", b =>
                 {
-                    b.HasOne("DiplomenP.Models.User", "Customer")
+                    b.HasOne("DiplomenP.Models.User", "CartCustomer")
                         .WithOne("Cart")
-                        .HasForeignKey("DiplomenP.Models.Cart", "CustomerId")
+                        .HasForeignKey("DiplomenP.Models.Cart", "CartCustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Customer");
+                    b.HasOne("DiplomenP.Models.Product", "CartProduct")
+                        .WithOne("Cart")
+                        .HasForeignKey("DiplomenP.Models.Cart", "CartProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CartCustomer");
+
+                    b.Navigation("CartProduct");
                 });
 
-            modelBuilder.Entity("DiplomenP.Models.CartItem", b =>
+            modelBuilder.Entity("DiplomenP.Models.Order", b =>
                 {
-                    b.HasOne("DiplomenP.Models.Cart", "Cart")
-                        .WithMany("CartItems")
-                        .HasForeignKey("CartId")
+                    b.HasOne("DiplomenP.Models.Cart", "OrderCart")
+                        .WithOne("Order")
+                        .HasForeignKey("DiplomenP.Models.Order", "OrderCartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DiplomenP.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
+                    b.HasOne("DiplomenP.Models.User", "OrderCustomer")
+                        .WithOne("Order")
+                        .HasForeignKey("DiplomenP.Models.Order", "OrderCustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Cart");
+                    b.Navigation("OrderCart");
 
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("DiplomenP.Models.OrderItem", b =>
-                {
-                    b.HasOne("DiplomenP.Models.Order", "Order")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DiplomenP.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
+                    b.Navigation("OrderCustomer");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -488,17 +426,22 @@ namespace DiplomenP.Migrations
 
             modelBuilder.Entity("DiplomenP.Models.Cart", b =>
                 {
-                    b.Navigation("CartItems");
+                    b.Navigation("Order")
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("DiplomenP.Models.Order", b =>
+            modelBuilder.Entity("DiplomenP.Models.Product", b =>
                 {
-                    b.Navigation("OrderItems");
+                    b.Navigation("Cart")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DiplomenP.Models.User", b =>
                 {
                     b.Navigation("Cart")
+                        .IsRequired();
+
+                    b.Navigation("Order")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

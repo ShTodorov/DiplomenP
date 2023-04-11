@@ -1,0 +1,60 @@
+﻿@page "/delete_product"
+
+<PageTitle>Изтриване</PageTitle>
+
+<style>
+
+    th {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+</style>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">#</th> <!-- 1 -->
+            <th scope="col">Name</th> <!-- 2 -->
+            <th scope="col">Price</th> <!-- 3 -->
+            <th scope="col">Type</th> <!-- 4 -->
+            <th scope="col">Count</th> <!-- 5 -->
+            <th scope="col">Image</th> <!-- 6 -->
+            <th scope="col">Description</th> <!-- 7 -->
+            <th scope="col">Brand</th> <!-- 8 -->
+            <th scope="col">Delete</th> <!-- 9 -->
+        </tr>
+    </thead>
+    <tbody>
+
+        <tr>
+            <th scope="row">1</th>
+            <td>Pesho</td>
+            <td>100.00</td>
+            <td>Accessories</td>
+            <td>50</td>
+            <td>Image.png</td> <!-- string -->
+            <td>Golema rabota</td>
+            <td>Mouse</td>
+            <td><button class="btn btn-outline-danger flex-shrink-0" type="button">–</button></td>
+        </tr>
+
+        <tr>
+            <th scope="row">2</th>
+            <td>Ivan</td>
+            <td>150.00</td>
+            <td>Clothes</td>
+            <td>20</td>
+            <td>Image1.jpg</td> <!-- string -->
+            <td colspan="2">Eagle</td>
+            <td><button class="btn btn-outline-danger flex-shrink-0" type="button">–</button></td>
+        </tr>
+
+    </tbody>
+</table>
+

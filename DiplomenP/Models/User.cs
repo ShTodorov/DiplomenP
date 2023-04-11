@@ -6,16 +6,14 @@ namespace DiplomenP.Models
 {
     public class User : IdentityUser
     {
-        [Required]
-        public string FirstName { get; set; }
 
-        [Required]
-        public string LastName { get; set; }
+        [NotMapped]
+        public int Role { get; set; }
 
-        [ForeignKey("Cart")]
-        public int? CartId { get; set; }
+        public Order Order { get; set; }
 
-        public virtual Cart Cart { get; set; }
+        public Cart Cart { get; set; }
+
     }
 }
 

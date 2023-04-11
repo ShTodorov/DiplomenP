@@ -10,7 +10,9 @@
             
             <div class="col-md-6">
 
-                <div class="small mb-1">Category: Rod</div>
+                <div class="small mb-1">Категория: Spinning_rod</div>
+
+                <div class="small mb-1">Марка: Eagle</div>
 
                 <h1 class="display-6 fw-bolder">Shop item template</h1>
 
@@ -24,7 +26,7 @@
                 
                 <div class="d-flex">
                     <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem; margin-right: 10px;">
-                    <button class="btn btn-outline-dark flex-shrink-0" type="button" @onclick="btnOpenLink_Click">
+                    <button class="btn btn-outline-dark flex-shrink-0" type="button">
                             <i class="bi-cart-fill me-1"></i>
                             Add to cart
                     </button>
@@ -38,9 +40,4 @@
 
 @code {
 
-    private void btnOpenLink_Click()
-    {
-        string url = "shopping_cart";
-        System.Diagnostics.Process.Start(url);
-    }
 }

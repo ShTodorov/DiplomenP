@@ -1,0 +1,103 @@
+﻿@page "/add_product"
+@using DiplomenP.Data;
+@using DiplomenP.Interfaces;
+@using DiplomenP.Models;
+
+<PageTitle>Добавяне</PageTitle>
+
+<section>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-6 col-lg-8 col-md-10 mx-auto">
+                <div class="row align-items-center mt-2 mb-2">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-title text-center mt-3">
+                                <h3>Добави нов продукт</h3>
+                            </div>
+                            <div class="card-body">
+                                <form action="">
+
+                                    <div class="form-group">
+                                        <label for="productname" class="mb-1">Име на продукта:</label>
+                                        <input type="text" class="form-control mb-3" id="productname" @bind-value="@product_name"
+                                               placeholder="Запиши име на продукта">
+                                        <div class="invalid-feedback">Полето с името не може да е празно!</div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="productprice" class="mb-1">Цена:</label>
+                                        <input type="text" class="form-control mb-3" id="productprice" @bind-value="@product_price"
+                                               placeholder="Запиши цена на продукта">
+                                        <div class="invalid-feedback">Полето с цена не може да е празно!</div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="producttype" class="mb-1">Тип:</label>
+                                        <input type="text" class="form-control mb-3" id="producttype" @bind-value="@type"
+                                               placeholder="Запиши тип на продукта">
+                                        <div class="invalid-feedback">Полето с типа не може да е празно!</div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="productcount" class="mb-1">Брой:</label>
+                                        <input type="text" class="form-control mb-3" id="productcount" @bind-value="@product_count"
+                                               placeholder="Запиши брой продукти">
+                                        <div class="invalid-feedback">Полето с брой не може да е празно!</div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="productdesc" class="mb-1">Описание:</label>
+                                        <input type="text" class="form-control mb-3" id="productdesc" @bind-value="@description"
+                                               placeholder="Запиши описание на продукта">
+                                        <div class="invalid-feedback">Полето с описание не може да е празно!</div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="productbrand" class="mb-1">Марка:</label>
+                                        <input type="text" class="form-control mb-3" id="productbrand" @bind-value="@brand"
+                                               placeholder="Запиши марка на продукта">
+                                        <div class="invalid-feedback">Полето с марка не може да е празно!</div>
+                                    </div>
+
+                                    <p>Снимка на продукта:</p>
+                                    <div class="custom-file">
+
+                                        <input type="file" class="custom-file-input" id="productimage" @bind-value="@image" required>
+                                        <div class="invalid-feedback">Формата на файла не се поддържа:</div>
+                                    </div>
+                                    <button class="btn btn-dark mt-5 mx-auto d-block" type="submit" @onclick="AddProduct">Добави продукт</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@code{
+
+    [Inject]
+    private IProductService ProductService { get; set; }
+
+    [Inject]
+    private ApplicationDbContext ApplicationdbContext { get; set; }
+
+    private string product_name { get; set; }
+    private double product_price { get; set; }
+    private string type { get; set; }
+    private int product_count { get; set; }
+    private string image { get; set; }
+    private string description { get; set; }
+    private string brand { get; set; }
+
+    private void AddProduct()
+    {
+        var product = new Product { ProductName = product_name, Price = product_price, Type = type, ProductCount = product_count, Image = image, Description = description, Brand = brand };
+        ApplicationdbContext.Products.Add(product);
+        ApplicationdbContext.SaveChanges();
+    }
+
+}

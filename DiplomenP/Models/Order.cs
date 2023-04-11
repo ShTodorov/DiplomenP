@@ -6,19 +6,30 @@ namespace DiplomenP.Models
     public class Order
     {
         [Key]
-        public int Id { get; set; }
+        public int OrderId { get; set; }
 
         [Required]
         public DateTime OrderDate { get; set; }
 
         [Required]
-        public string CustomerId { get; set; }
+        public string Adress { get; set; }
 
         [Required]
-        public double TotalAmount { get; set; }
+        public int PhoneNumber { get; set; }
 
-        [InverseProperty("Order")]
-        public virtual ICollection<OrderItem> OrderItems { get; set; }
+        public string? OrderDescription { get; set; }
+
+        [Required]
+        public double TotalOrderPrice { get; set; }
+
+        [ForeignKey("OrderCart")]
+        public int OrderCartId { get; set; }
+        public virtual Cart OrderCart { get; set; }
+
+        [ForeignKey("OrderCustomer")]
+        public string OrderCustomerId { get; set; }
+        public virtual User OrderCustomer { get; set; }
+
     }
 
 }

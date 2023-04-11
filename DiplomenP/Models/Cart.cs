@@ -6,17 +6,18 @@ namespace DiplomenP.Models
     public class Cart
     {
         [Key]
-        public int Id { get; set; }
+        public int CartId { get; set; }
 
-        [Required]
-        public string CustomerId { get; set; }
+        [ForeignKey("CartProduct")]
+        public int CartProductId { get; set; }
+        public virtual Product CartProduct { get; set; }
 
-        [InverseProperty("Cart")]
-        public virtual ICollection<CartItem> CartItems { get; set; }
+        [ForeignKey("CartCustomer")]
+        public string CartCustomerId { get; set; }
+        public virtual User CartCustomer { get; set; }
 
-        [ForeignKey("CustomerId")]
-        public string UserId { get; set; }
-        public virtual User Customer { get; set; }
+        public Order Order { get; set; }
+
     }
 
 

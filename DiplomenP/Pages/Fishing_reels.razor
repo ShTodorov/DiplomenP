@@ -1,13 +1,160 @@
 ﻿@page "/fishing_reels"
+@using DiplomenP.Interfaces;
+@using DiplomenP.Models;
 
 <PageTitle>Макари</PageTitle>
 
 <h2>Преден аванс</h2>
 
+<div class="container mydiv">
+    <div class="row">
+
+        @foreach (var product in products)
+        {
+
+            if (product.Type == "Front_advance")
+            {
+                <div class="col-md-6 col-lg-4 col-xl-3">
+
+                    <!-- bbb_deals -->
+
+                    <div class="bbb_deals">
+                        <div class="bbb_deals_slider_container">
+                            <div class=" bbb_deals_item">
+                                <div class="bbb_deals_image"><img src="https://www.eagleclaw.com/pub/media/catalog/product/cache/8b827f92d40f53910595a661ebde8346/e/c/ec35s63mlf1.jpg" alt="product.img"></div>
+                                <div class="bbb_deals_content">
+                                    <div class="bbb_deals_info_line d-flex flex-row justify-content-between">
+                                        <div class="bbb_deals_item_category text-secondary">@product.Type</div>
+                                        <div class="bbb_deals_item_category text-secondary">@product.Brand</div>
+                                    </div>
+                                    <div class="bbb_deals_info_line">
+                                        <div class="bbb_deals_item_name"><a href="product_page">@product.ProductName</a></div>
+                                    </div>
+                                    <div class="bbb_deals_info_line d-flex flex-row justify-content-start">
+                                        <div class="bbb_deals_item_price ml-auto">@product.Price лв.</div>
+                                    </div>
+                                    <div class="available">
+                                        <div class="available_line d-flex flex-row justify-content-start">
+                                            <div class="available_title">Available: <span>@product.ProductCount</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            }
+
+        }
+
+    </div>
+</div>
+
 <h2>Заден аванс</h2>
+
+<div class="container mydiv">
+    <div class="row">
+
+        @foreach (var product in products)
+        {
+
+            if (product.Type == "Back_advance")
+            {
+                <div class="col-md-6 col-lg-4 col-xl-3">
+
+                    <!-- bbb_deals -->
+
+                    <div class="bbb_deals">
+                        <div class="bbb_deals_slider_container">
+                            <div class=" bbb_deals_item">
+                                <div class="bbb_deals_image"><img src="https://www.eagleclaw.com/pub/media/catalog/product/cache/8b827f92d40f53910595a661ebde8346/e/c/ec35s63mlf1.jpg" alt="product.img"></div>
+                                <div class="bbb_deals_content">
+                                    <div class="bbb_deals_info_line d-flex flex-row justify-content-between">
+                                        <div class="bbb_deals_item_category text-secondary">@product.Type</div>
+                                        <div class="bbb_deals_item_category text-secondary">@product.Brand</div>
+                                    </div>
+                                    <div class="bbb_deals_info_line">
+                                        <div class="bbb_deals_item_name"><a href="product_page">@product.ProductName</a></div>
+                                    </div>
+                                    <div class="bbb_deals_info_line d-flex flex-row justify-content-start">
+                                        <div class="bbb_deals_item_price ml-auto">@product.Price лв.</div>
+                                    </div>
+                                    <div class="available">
+                                        <div class="available_line d-flex flex-row justify-content-start">
+                                            <div class="available_title">Available: <span>@product.ProductCount</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            }
+
+        }
+
+    </div>
+</div>
 
 <h2>Мухарски макари</h2>
 
+<div class="container mydiv">
+    <div class="row">
+
+        @foreach (var product in products)
+        {
+
+            if (product.Type == "Fly_reel")
+            {
+                <div class="col-md-6 col-lg-4 col-xl-3">
+
+                    <!-- bbb_deals -->
+
+                    <div class="bbb_deals">
+                        <div class="bbb_deals_slider_container">
+                            <div class=" bbb_deals_item">
+                                <div class="bbb_deals_image"><img src="https://www.eagleclaw.com/pub/media/catalog/product/cache/8b827f92d40f53910595a661ebde8346/e/c/ec35s63mlf1.jpg" alt="product.img"></div>
+                                <div class="bbb_deals_content">
+                                    <div class="bbb_deals_info_line d-flex flex-row justify-content-between">
+                                        <div class="bbb_deals_item_category text-secondary">@product.Type</div>
+                                        <div class="bbb_deals_item_category text-secondary">@product.Brand</div>
+                                    </div>
+                                    <div class="bbb_deals_info_line">
+                                        <div class="bbb_deals_item_name"><a href="product_page">@product.ProductName</a></div>
+                                    </div>
+                                    <div class="bbb_deals_info_line d-flex flex-row justify-content-start">
+                                        <div class="bbb_deals_item_price ml-auto">@product.Price лв.</div>
+                                    </div>
+                                    <div class="available">
+                                        <div class="available_line d-flex flex-row justify-content-start">
+                                            <div class="available_title">Available: <span>@product.ProductCount</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            }
+
+        }
+
+    </div>
+</div>
+
 @code {
+
+    [Inject]
+    private IProductService ProductService { get; set; }
+
+    private List<Product> products = new List<Product>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = ProductService.GetProducts();
+    }
 
 }
