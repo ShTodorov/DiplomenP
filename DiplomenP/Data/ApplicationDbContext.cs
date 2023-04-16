@@ -16,16 +16,21 @@ namespace DiplomenP.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Product>()
+                .Property(p => p.Price)
+                .HasColumnType("decimal(18,2)");
+
             modelBuilder.Entity<Order>()
                 .HasOne(c => c.OrderCart)
                 .WithOne(o => o.Order)
                 .HasForeignKey<Order>(k => k.OrderCartId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Order>()
                 .HasOne(c => c.OrderCustomer)
@@ -34,16 +39,15 @@ namespace DiplomenP.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Cart>()
-                .HasOne(p => p.CartProduct)
-                .WithOne(c => c.Cart)
-                .HasForeignKey<Cart>(k => k.CartProductId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Cart>()
                 .HasOne(c => c.CartCustomer)
                 .WithOne(ca => ca.Cart)
                 .HasForeignKey<Cart>(k => k.CartCustomerId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Cart>()
+                .HasMany(i => i.Items)
+                .WithOne(c => c.Cart)
+                .OnDelete(DeleteBehavior.Restrict);
 
             /*
 

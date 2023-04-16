@@ -2,8 +2,21 @@
 @using DiplomenP.Data;
 @using DiplomenP.Interfaces;
 @using DiplomenP.Models;
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Mvc;
+@using System.Text.RegularExpressions;
 
 <PageTitle>Добавяне</PageTitle>
+
+@if (IsSuccess)
+{
+    <p class="text-success">Продуктът беше създаден успешно!</p>
+}
+
+@if (IsError)
+{
+    <p class="text-danger">Възникна грешка при създаването на продукта.</p>
+}
 
 <section>
     <div class="container-fluid">
@@ -16,57 +29,79 @@
                                 <h3>Добави нов продукт</h3>
                             </div>
                             <div class="card-body">
-                                <form action="">
+                                <form action="" @onsubmit="HandleSubmit">
 
                                     <div class="form-group">
                                         <label for="productname" class="mb-1">Име на продукта:</label>
-                                        <input type="text" class="form-control mb-3" id="productname" @bind-value="@product_name"
+                                        <input type="text" class="form-control mb-3" id="productname" @bind="product.ProductName" required
                                                placeholder="Запиши име на продукта">
                                         <div class="invalid-feedback">Полето с името не може да е празно!</div>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="productprice" class="mb-1">Цена:</label>
-                                        <input type="text" class="form-control mb-3" id="productprice" @bind-value="@product_price"
+                                        <input type="text" class="form-control mb-3" id="productprice" @bind="product.Price" required
                                                placeholder="Запиши цена на продукта">
                                         <div class="invalid-feedback">Полето с цена не може да е празно!</div>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="producttype" class="mb-1">Тип:</label>
-                                        <input type="text" class="form-control mb-3" id="producttype" @bind-value="@type"
-                                               placeholder="Запиши тип на продукта">
-                                        <div class="invalid-feedback">Полето с типа не може да е празно!</div>
+
+                                        <select id="productType" name="Type" @onchange="OnSelect" class="form-control mb-3">
+                                            <optgroup label="Fishing_rod">
+                                                <option value="Carp_rod">Carp_rod</option>
+                                                <option value="Trolling_rod">Trolling_rod</option>
+                                                <option value="Spinning_rod">Spinning_rod</option>
+                                                <option value="Fly_rod">Fly_rod</option>
+                                            </optgroup>
+                                            <optgroup label="Fishing_reel">
+                                                <option value="Front_advance">Front_advance</option>
+                                                <option value="Back_advance">Back_advance</option>
+                                                <option value="Fly_reel">Fly_reel</option>
+                                            </optgroup>
+                                            <optgroup label="Fishing_line">
+                                                <option value="Monofilament_line">Monofilament_line</option>
+                                                <option value="Braided_line">Braided_line</option>
+                                            </optgroup>
+                                            <optgroup label="Fishing_hook">
+                                                <option value="One_hook">One_hook</option>
+                                                <option value="Three_hook">Three_hook</option>
+                                                <option value="Lure">Lure</option>
+                                            </optgroup>
+                                            <option value="Fishing_clothes">Fishing_clothes</option>
+                                            <option value="Fishing_accessories">Fishing_accessories</option>
+                                        </select>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="productcount" class="mb-1">Брой:</label>
-                                        <input type="text" class="form-control mb-3" id="productcount" @bind-value="@product_count"
+                                        <input type="text" class="form-control mb-3" id="productcount" @bind="product.ProductCount" required
                                                placeholder="Запиши брой продукти">
                                         <div class="invalid-feedback">Полето с брой не може да е празно!</div>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="productdesc" class="mb-1">Описание:</label>
-                                        <input type="text" class="form-control mb-3" id="productdesc" @bind-value="@description"
+                                        <input type="text" class="form-control mb-3" id="productdesc" @bind="product.Description" required
                                                placeholder="Запиши описание на продукта">
                                         <div class="invalid-feedback">Полето с описание не може да е празно!</div>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="productbrand" class="mb-1">Марка:</label>
-                                        <input type="text" class="form-control mb-3" id="productbrand" @bind-value="@brand"
+                                        <input type="text" class="form-control mb-3" id="productbrand" @bind="product.Brand" required
                                                placeholder="Запиши марка на продукта">
                                         <div class="invalid-feedback">Полето с марка не може да е празно!</div>
                                     </div>
 
-                                    <p>Снимка на продукта:</p>
-                                    <div class="custom-file">
-
-                                        <input type="file" class="custom-file-input" id="productimage" @bind-value="@image" required>
-                                        <div class="invalid-feedback">Формата на файла не се поддържа:</div>
+                                    <div class="form-group">
+                                        <label for="productbrand" class="mb-1">Снимка:</label>
+                                        <input type="text" class="form-control mb-3" id="productimage" @bind="product.Image" required
+                                               placeholder="Запиши снимка на продукта">
+                                        <div class="invalid-feedback">Полето с марка не може да е празно!</div>
                                     </div>
-                                    <button class="btn btn-dark mt-5 mx-auto d-block" type="submit" @onclick="AddProduct">Добави продукт</button>
+                                    <button class="btn btn-dark mt-5 mx-auto d-block" type="submit">Добави продукт</button>
                                 </form>
                             </div>
                         </div>
@@ -82,22 +117,47 @@
     [Inject]
     private IProductService ProductService { get; set; }
 
-    [Inject]
-    private ApplicationDbContext ApplicationdbContext { get; set; }
+    private Product product { get; set; } = new Product();
+    private bool IsSuccess { get; set; }    
+    private bool IsError { get; set; }
 
-    private string product_name { get; set; }
-    private double product_price { get; set; }
-    private string type { get; set; }
-    private int product_count { get; set; }
-    private string image { get; set; }
-    private string description { get; set; }
-    private string brand { get; set; }
-
-    private void AddProduct()
+    private string selectedString = "Carp_rod";
+    private void OnSelect(ChangeEventArgs e)
     {
-        var product = new Product { ProductName = product_name, Price = product_price, Type = type, ProductCount = product_count, Image = image, Description = description, Brand = brand };
-        ApplicationdbContext.Products.Add(product);
-        ApplicationdbContext.SaveChanges();
+        selectedString = e.Value.ToString();
+    }
+
+    public bool IsStringValid(string input)
+    {
+        // Regular expression to match strings that contain at least one letter
+        Regex regex = new Regex(@"^(?=.*[a-zA-Z])[\p{L}\p{N}\s\p{P}]*$");
+
+        return regex.IsMatch(input);
+    }
+
+    private async Task HandleSubmit()
+    {
+        product.Type = selectedString;
+        if (product.Price >= 0 && product.Price <= 5000 && product.ProductCount <= 5000 && product.ProductCount >= 0 && IsStringValid(product.ProductName) && IsStringValid(product.Image)
+        && IsStringValid(product.Description) && IsStringValid(product.Brand) )
+        {
+            await ProductService.CreateProductAsync(product.ProductName, product.Price, product.Type, product.ProductCount, product.Image, product.Description, product.Brand);
+            IsSuccess = true;
+
+            product.ProductName = "";
+            product.Price = 0;
+            product.Type = "";
+            product.ProductCount = 0;
+            product.Image = "";
+            product.Description = "";
+            product.Brand = "";
+
+            IsError = false;
+        }
+        else
+        {
+            IsError = true;
+        }
     }
 
 }

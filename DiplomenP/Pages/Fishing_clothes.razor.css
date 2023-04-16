@@ -48,6 +48,10 @@ div {
     margin-bottom: 20px;
 }
 
+.bbb_deals:hover {
+    cursor: pointer;
+}
+
 .bbb_deals_slider_container {
     width: 100%
 }

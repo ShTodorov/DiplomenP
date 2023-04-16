@@ -1,43 +1,75 @@
 ﻿@page "/fishing_clothes"
+@using DiplomenP.Interfaces;
+@using DiplomenP.Models;
+@inject NavigationManager NavigationManager
 
 <PageTitle>Облекло</PageTitle>
 
 <h2>Облекло</h2>
 
 <div class="container mydiv">
-    <div class="row">
+    <div class="row d-flex">
 
-        <div class="col-md-6 col-lg-4 col-xl-3">
-            <!-- bbb_deals -->
-            <div class="bbb_deals">
-                <div class="bbb_deals_slider_container">
-                    <div class=" bbb_deals_item">
-                        <div class="bbb_deals_image"><img src="https://www.eagleclaw.com/pub/media/catalog/product/cache/8b827f92d40f53910595a661ebde8346/e/c/ec35s63mlf1.jpg" alt="product.img"></div>
-                        <div class="bbb_deals_content">
-                            <div class="bbb_deals_info_line d-flex flex-row justify-content-between">
-                                <div class="bbb_deals_item_category"><a href="#">Spinning_rod</a></div>
-                                <div class="bbb_deals_item_category text-secondary">Eagle</div>
-                            </div>
-                            <div class="bbb_deals_info_line">
-                                <div class="bbb_deals_item_name"><a href="product_page">Спининг въдица Кошмара</a></div>
-                            </div>
-                            <div class="bbb_deals_info_line d-flex flex-row justify-content-start">
-                                <div class="bbb_deals_item_price ml-auto">100.00 лв.</div>
-                            </div>
-                            <div class="available">
-                                <div class="available_line d-flex flex-row justify-content-start">
-                                    <div class="available_title">Available: <span>50</span></div>
+        @foreach(var product in products)
+        {
+
+            if (product.Type == "Fishing_clothes")
+            {
+
+                <div class="col-md-6 col-lg-4 col-xl-3">
+
+                    <!-- bbb_deals -->
+
+                    <div class="bbb_deals" @onclick="() => ViewProductDetails(product)">
+                        <div class="bbb_deals_slider_container">
+                            <div class=" bbb_deals_item">
+                                <div class="bbb_deals_image"><img src="@product.Image" alt="product.img"></div>
+                                <div class="bbb_deals_content">
+                                    <div class="bbb_deals_info_line d-flex flex-row justify-content-between">
+                                        <div class="bbb_deals_item_category text-secondary">@product.Type</div>
+                                        <div class="bbb_deals_item_category text-secondary">@product.Brand</div>
+                                    </div>
+                                    <div class="bbb_deals_info_line">
+                                        <div class="bbb_deals_item_name">@product.ProductName</div>
+                                    </div>
+                                    <div class="bbb_deals_info_line d-flex flex-row justify-content-start">
+                                        <div class="bbb_deals_item_price ml-auto">@product.Price.ToString("0.00") лв.</div>
+                                    </div>
+                                    <div class="available">
+                                        <div class="available_line d-flex flex-row justify-content-start">
+                                            <div class="available_title">Налични: <span>@product.ProductCount</span></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
-            </div>
-        </div>
+
+            }
+
+        }
 
     </div>
 </div>
 
 @code {
+
+    [Inject]
+    private IProductService ProductService { get; set; }
+
+    private List<Product> products = new List<Product>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = ProductService.GetProducts();
+    }
+
+    private void ViewProductDetails(Product product)
+    {
+        string id = (product.ProductId).ToString();
+        NavigationManager.NavigateTo($"/product_page/{id}");
+    }
 
 }

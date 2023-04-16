@@ -8,13 +8,11 @@ namespace DiplomenP.Models
         [Key]
         public int CartId { get; set; }
 
-        [ForeignKey("CartProduct")]
-        public int CartProductId { get; set; }
-        public virtual Product CartProduct { get; set; }
-
-        [ForeignKey("CartCustomer")]
-        public string CartCustomerId { get; set; }
+        [ForeignKey("CartCustomerId")]
         public virtual User CartCustomer { get; set; }
+        public string CartCustomerId { get; set; }
+
+        public virtual ICollection<CartItem> Items { get; set; }
 
         public Order Order { get; set; }
 

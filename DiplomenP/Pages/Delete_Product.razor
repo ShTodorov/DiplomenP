@@ -1,4 +1,6 @@
 ﻿@page "/delete_product"
+@using DiplomenP.Interfaces;
+@using DiplomenP.Models;
 
 <PageTitle>Изтриване</PageTitle>
 
@@ -16,45 +18,148 @@
 
 </style>
 
-<table class="table table-hover">
+<style type="text/css" media="screen and (max-width:610px)">
+
+    .brand {
+        display: none;
+    }
+
+</style>
+
+<style type="text/css" media="screen and (max-width:500px)">
+
+    .type {
+        display: none;
+    }
+
+</style>
+
+@if (UpIsSuccess)
+{
+    <p class="text-success text-center">Продуктът беше променен успешно!</p>
+}
+
+@if (UpIsError)
+{
+    <p class="text-danger text-center">Възникна грешка при променянето на продукта.</p>
+}
+
+<section class="mb-5">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-6 col-lg-8 col-md-10 mx-auto">
+                <div class="row align-items-center mt-2 mb-2">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-title text-center mt-3">
+                                <h3>Промени продукт</h3>
+                            </div>
+                            <div class="card-body">
+                                <EditForm Model="@product" OnValidSubmit="HandleUpdateSubmit">
+
+                                    <div class="form-group">
+                                        <label for="name">Име на продукта:</label>
+                                        <InputText id="name" class="form-control mb-3" @bind-Value="@product.ProductName" placeholder="Запиши име на продукта" reqiured />
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="price">Цена на продукта:</label>
+                                        <InputNumber id="price" class="form-control mb-3" @bind-Value="@product.Price" reqiured />
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="count">Брой на продукта:</label>
+                                        <InputNumber id="count" class="form-control mb-3" @bind-Value="@product.ProductCount" reqiured />
+                                    </div>
+
+                                    <button type="submit" class="btn btn-dark mt-5 mx-auto d-block">Update Product</button>
+                                </EditForm>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<table class="table table-hover w-100">
     <thead>
         <tr>
             <th scope="col">#</th> <!-- 1 -->
             <th scope="col">Name</th> <!-- 2 -->
             <th scope="col">Price</th> <!-- 3 -->
-            <th scope="col">Type</th> <!-- 4 -->
+            <th class="type" scope="col">Type</th> <!-- 4 -->
             <th scope="col">Count</th> <!-- 5 -->
-            <th scope="col">Image</th> <!-- 6 -->
-            <th scope="col">Description</th> <!-- 7 -->
-            <th scope="col">Brand</th> <!-- 8 -->
+            <th class="brand" scope="col">Brand</th> <!-- 8 -->
             <th scope="col">Delete</th> <!-- 9 -->
         </tr>
     </thead>
     <tbody>
 
-        <tr>
-            <th scope="row">1</th>
-            <td>Pesho</td>
-            <td>100.00</td>
-            <td>Accessories</td>
-            <td>50</td>
-            <td>Image.png</td> <!-- string -->
-            <td>Golema rabota</td>
-            <td>Mouse</td>
-            <td><button class="btn btn-outline-danger flex-shrink-0" type="button">–</button></td>
-        </tr>
+        @foreach(var product in products)
+        {
+            
+            <tr>
+                <th scope="row">@product.ProductId</th>
+                <td>@product.ProductName</td>
+                <td>@product.Price.ToString("0.00")</td>
+                <td class="type">@product.Type</td>
+                <td>@product.ProductCount</td>
+                <td class="brand">@product.Brand</td>
+                <td><button class="btn btn-outline-danger flex-shrink-0" @onclick="() => DeleteProduct(product.ProductId)" type="button">–</button></td>
+            </tr>
 
-        <tr>
-            <th scope="row">2</th>
-            <td>Ivan</td>
-            <td>150.00</td>
-            <td>Clothes</td>
-            <td>20</td>
-            <td>Image1.jpg</td> <!-- string -->
-            <td colspan="2">Eagle</td>
-            <td><button class="btn btn-outline-danger flex-shrink-0" type="button">–</button></td>
-        </tr>
+        }
 
     </tbody>
 </table>
 
+@code{
+
+    [Inject]
+    private IProductService ProductService { get; set; }
+
+    private List<Product> products { get; set; }
+
+    private Product product { get; set; } = new Product();
+
+    private bool UpIsSuccess { get; set; }
+    private bool UpIsError { get; set; }
+
+    private bool productExists;
+
+    private async Task DeleteProduct(int productId)
+    {
+        await ProductService.DeleteProductAsync(productId);
+        products =  ProductService.GetProducts();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = ProductService.GetProducts();
+    }
+
+    private async Task HandleUpdateSubmit()
+    {
+
+        productExists = await ProductService.ProductExists(product.ProductName);
+
+        if (productExists && product.ProductCount>=0 && product.Price>=0)
+        {
+            UpIsSuccess = true;
+            await ProductService.UpdateProductByName(product.ProductName, product.Price, product.ProductCount);
+
+            product.ProductName = "";
+            product.Price = 0;
+            product.ProductCount = 0;
+
+            UpIsError = false;
+        }
+        else
+        {
+            UpIsError = true;
+        }
+    }
+
+}

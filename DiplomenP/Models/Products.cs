@@ -37,7 +37,7 @@ namespace DiplomenP.Models
         [StringLength(50, ErrorMessage = "Brand cannot be longer than 50 characters")]
         public string Brand { get; set; }
 
-        public Cart Cart { get; set; }
+        public CartItem CartItems { get; set; }
     }
 
 }

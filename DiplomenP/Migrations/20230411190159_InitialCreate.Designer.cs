@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DiplomenP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230408095652_InitialCreate")]
+    [Migration("20230411190159_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,18 +36,39 @@ namespace DiplomenP.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("CartProductId")
-                        .HasColumnType("int");
-
                     b.HasKey("CartId");
 
                     b.HasIndex("CartCustomerId")
                         .IsUnique();
 
-                    b.HasIndex("CartProductId")
+                    b.ToTable("Carts");
+                });
+
+            modelBuilder.Entity("DiplomenP.Models.CartItem", b =>
+                {
+                    b.Property<int>("CartItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartItemId"), 1L, 1);
+
+                    b.Property<int>("CartId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CartItemProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("CartItemId");
+
+                    b.HasIndex("CartId");
+
+                    b.HasIndex("CartItemProductId")
                         .IsUnique();
 
-                    b.ToTable("Carts");
+                    b.ToTable("CartItem");
                 });
 
             modelBuilder.Entity("DiplomenP.Models.Order", b =>
@@ -62,7 +83,8 @@ namespace DiplomenP.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OrderCartId")
+                    b.Property<int?>("OrderCartId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("OrderCustomerId")
@@ -345,15 +367,26 @@ namespace DiplomenP.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DiplomenP.Models.Product", "CartProduct")
-                        .WithOne("Cart")
-                        .HasForeignKey("DiplomenP.Models.Cart", "CartProductId")
+                    b.Navigation("CartCustomer");
+                });
+
+            modelBuilder.Entity("DiplomenP.Models.CartItem", b =>
+                {
+                    b.HasOne("DiplomenP.Models.Cart", "Cart")
+                        .WithMany("Items")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("DiplomenP.Models.Product", "CartItemProduct")
+                        .WithOne("CartItems")
+                        .HasForeignKey("DiplomenP.Models.CartItem", "CartItemProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CartCustomer");
+                    b.Navigation("Cart");
 
-                    b.Navigation("CartProduct");
+                    b.Navigation("CartItemProduct");
                 });
 
             modelBuilder.Entity("DiplomenP.Models.Order", b =>
@@ -361,7 +394,7 @@ namespace DiplomenP.Migrations
                     b.HasOne("DiplomenP.Models.Cart", "OrderCart")
                         .WithOne("Order")
                         .HasForeignKey("DiplomenP.Models.Order", "OrderCartId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DiplomenP.Models.User", "OrderCustomer")
@@ -428,13 +461,15 @@ namespace DiplomenP.Migrations
 
             modelBuilder.Entity("DiplomenP.Models.Cart", b =>
                 {
+                    b.Navigation("Items");
+
                     b.Navigation("Order")
                         .IsRequired();
                 });
 
             modelBuilder.Entity("DiplomenP.Models.Product", b =>
                 {
-                    b.Navigation("Cart")
+                    b.Navigation("CartItems")
                         .IsRequired();
                 });
 

@@ -8,5 +8,10 @@ namespace DiplomenP.Interfaces
 
         List<Product> GetProducts();
 
+        Task<bool> UpdateProductByName(string name, double? newPrice, int? newCount);
+
+        Task<bool> ProductExists(string productName);
+
+        Task DeleteProductAsync(int productId);
     }
 }

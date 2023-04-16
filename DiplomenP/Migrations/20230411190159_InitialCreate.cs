@@ -179,7 +179,6 @@ namespace DiplomenP.Migrations
                 {
                     CartId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CartProductId = table.Column<int>(type: "int", nullable: false),
                     CartCustomerId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -191,9 +190,30 @@ namespace DiplomenP.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CartItem",
+                columns: table => new
+                {
+                    CartItemId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    CartItemProductId = table.Column<int>(type: "int", nullable: false),
+                    CartId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CartItem", x => x.CartItemId);
                     table.ForeignKey(
-                        name: "FK_Carts_Products_CartProductId",
-                        column: x => x.CartProductId,
+                        name: "FK_CartItem_Carts_CartId",
+                        column: x => x.CartId,
+                        principalTable: "Carts",
+                        principalColumn: "CartId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CartItem_Products_CartItemProductId",
+                        column: x => x.CartItemProductId,
                         principalTable: "Products",
                         principalColumn: "ProductId",
                         onDelete: ReferentialAction.Cascade);
@@ -227,7 +247,7 @@ namespace DiplomenP.Migrations
                         column: x => x.OrderCartId,
                         principalTable: "Carts",
                         principalColumn: "CartId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -270,15 +290,20 @@ namespace DiplomenP.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Carts_CartCustomerId",
-                table: "Carts",
-                column: "CartCustomerId",
+                name: "IX_CartItem_CartId",
+                table: "CartItem",
+                column: "CartId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartItem_CartItemProductId",
+                table: "CartItem",
+                column: "CartItemProductId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Carts_CartProductId",
+                name: "IX_Carts_CartCustomerId",
                 table: "Carts",
-                column: "CartProductId",
+                column: "CartCustomerId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -312,19 +337,22 @@ namespace DiplomenP.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "CartItem");
+
+            migrationBuilder.DropTable(
                 name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "Products");
+
+            migrationBuilder.DropTable(
                 name: "Carts");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Products");
         }
     }
 }

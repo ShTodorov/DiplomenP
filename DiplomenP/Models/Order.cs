@@ -22,13 +22,13 @@ namespace DiplomenP.Models
         [Required]
         public double TotalOrderPrice { get; set; }
 
-        [ForeignKey("OrderCart")]
-        public int OrderCartId { get; set; }
+        [ForeignKey("OrderCartId")]
         public virtual Cart OrderCart { get; set; }
+        public int? OrderCartId { get; set; }
 
-        [ForeignKey("OrderCustomer")]
-        public string OrderCustomerId { get; set; }
+        [ForeignKey("OrderCustomerId")]
         public virtual User OrderCustomer { get; set; }
+        public string OrderCustomerId { get; set; }
 
     }
 
