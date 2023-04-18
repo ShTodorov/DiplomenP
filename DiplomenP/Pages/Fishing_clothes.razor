@@ -1,6 +1,10 @@
 ﻿@page "/fishing_clothes"
 @using DiplomenP.Interfaces;
 @using DiplomenP.Models;
+@using System.Security.Claims;
+@using Microsoft.IdentityModel.Tokens;
+@using System.IdentityModel.Tokens.Jwt;
+@using System.Text;
 @inject NavigationManager NavigationManager
 
 <PageTitle>Облекло</PageTitle>
@@ -68,8 +72,24 @@
 
     private void ViewProductDetails(Product product)
     {
-        string id = (product.ProductId).ToString();
-        NavigationManager.NavigateTo($"/product_page/{id}");
+        var claims = new[]
+        {
+        new Claim("ProductId", product.ProductId.ToString())
+    };
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("VelikdenPraznik438hjdjjijfn3912ur8ajedojdioahu"));
+        var token = tokenHandler.CreateJwtSecurityToken(
+            subject: new ClaimsIdentity(claims),
+            expires: DateTime.UtcNow.AddDays(1),
+            signingCredentials: new SigningCredentials(
+                key,
+                SecurityAlgorithms.HmacSha256Signature)
+        );
+
+        var tokenString = tokenHandler.WriteToken(token);
+
+        NavigationManager.NavigateTo($"/product_page?token={tokenString}");
     }
 
 }

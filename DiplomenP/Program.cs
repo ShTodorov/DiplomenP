@@ -18,6 +18,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<User>>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICartService, CartService>();
 
@@ -55,5 +56,17 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
+
+// Seed the database
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var dbContext = services.GetService<ApplicationDbContext>();
+    var userManager = services.GetService<UserManager<User>>();
+    var roleManager = services.GetService<RoleManager<IdentityRole>>();
+    dbContext.Database.EnsureCreated();
+
+    DatabaseSeed.Seed(dbContext, userManager, roleManager).Wait();
+}
 
 app.Run();

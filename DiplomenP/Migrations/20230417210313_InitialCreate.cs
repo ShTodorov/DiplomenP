@@ -193,7 +193,7 @@ namespace DiplomenP.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CartItem",
+                name: "CartItems",
                 columns: table => new
                 {
                     CartItemId = table.Column<int>(type: "int", nullable: false)
@@ -204,15 +204,15 @@ namespace DiplomenP.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CartItem", x => x.CartItemId);
+                    table.PrimaryKey("PK_CartItems", x => x.CartItemId);
                     table.ForeignKey(
-                        name: "FK_CartItem_Carts_CartId",
+                        name: "FK_CartItems_Carts_CartId",
                         column: x => x.CartId,
                         principalTable: "Carts",
                         principalColumn: "CartId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_CartItem_Products_CartItemProductId",
+                        name: "FK_CartItems_Products_CartItemProductId",
                         column: x => x.CartItemProductId,
                         principalTable: "Products",
                         principalColumn: "ProductId",
@@ -290,13 +290,13 @@ namespace DiplomenP.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CartItem_CartId",
-                table: "CartItem",
+                name: "IX_CartItems_CartId",
+                table: "CartItems",
                 column: "CartId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CartItem_CartItemProductId",
-                table: "CartItem",
+                name: "IX_CartItems_CartItemProductId",
+                table: "CartItems",
                 column: "CartItemProductId",
                 unique: true);
 
@@ -337,7 +337,7 @@ namespace DiplomenP.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "CartItem");
+                name: "CartItems");
 
             migrationBuilder.DropTable(
                 name: "Orders");

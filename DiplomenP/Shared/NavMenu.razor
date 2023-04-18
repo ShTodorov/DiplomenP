@@ -9,8 +9,8 @@
 
                 <li class="nav-item">
                     <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                            <p class="cat">Home</p>
-                     </NavLink>
+                        <p class="cat">Home</p>
+                    </NavLink>
                 </li>
 
                 <li class="nav-item">
@@ -55,17 +55,19 @@
                     </NavLink>
                 </li>
 
-                <li class="nav-item">
-                    <NavLink class="nav-link" href="add_product">
-                        <p class="cat">+</p>
-                    </NavLink>
-                </li>
+                <AuthorizeView Roles="Admin">
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="add_product">
+                            <p class="cat">+</p>
+                        </NavLink>
+                    </li>
 
-                <li class="nav-item">
-                    <NavLink class="nav-link" href="delete_product">
-                        <p class="cat">Up/–</p>
-                    </NavLink>
-                </li>
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="delete_product">
+                            <p class="cat">Up/–</p>
+                        </NavLink>
+                    </li>
+                </AuthorizeView>
 
             </ul>
         </div>
@@ -81,4 +83,5 @@
     {
         collapseNavMenu = !collapseNavMenu;
     }
+
 }

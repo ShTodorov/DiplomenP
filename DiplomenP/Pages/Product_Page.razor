@@ -1,12 +1,17 @@
-﻿@page "/product_page/{productId}"
+﻿@page "/product_page"
 @using DiplomenP.Data;
 @using DiplomenP.Interfaces;
 @using DiplomenP.Models;
+@using System.IdentityModel.Tokens.Jwt;
+@using Microsoft.IdentityModel.Tokens;
+@using System.Text;
 @inject ICartService CartService
+@inject IUserService UserService
 @inject NavigationManager NavigationManager
 
 <PageTitle></PageTitle>
-
+@if (IsUserLogged)
+{
     <section class="py-5">
         <div class="container px-4 px-lg-5 my-5">
             <div class="row gx-4 gx-lg-5 align-items-center">
@@ -33,9 +38,9 @@
 
                     <div class="d-flex">
                         <input class="form-control text-center" id="inputQuantity" type="text" @bind-value="quantity" style="max-width: 4rem; margin-right: 10px;" required>
-                        <button class="btn btn-outline-dark flex-shrink-0" type="button" @onclick="AddToCart">
+                        <button class="btn btn-outline-dark flex-shrink-0" type="button" @onclick="CreateCartItem">
                             <i class="bi-cart-fill me-1"></i>
-                            Add to cart
+                            Добави в количката
                         </button>
                     </div>
 
@@ -44,31 +49,93 @@
             </div>
         </div>
     </section>
-
+}
+else
+{
+    <h3>Трябва да влезете в профила си.</h3>
+}
 
 @code {
     [Inject]
     private ApplicationDbContext dbContext { get; set; }
 
-    [Parameter]
-    public string productId { get; set; }
-
-    private Product product { get; set; }
+    private Product product;
 
     private int quantity { get; set; }
+    private string? userId;
+    private bool IsUserLogged = true;
 
     protected override async Task OnInitializedAsync()
     {
-        int id = int.Parse(productId);
-        product = await dbContext.Products.FindAsync(id);
+        // Get the JWT token from the URI
+        var tokenString = NavigationManager.Uri.Split('?').LastOrDefault()?.Replace("token=", "");
+
+        if (string.IsNullOrWhiteSpace(tokenString))
+        {
+            // Redirect the user to the product list page if the token is missing
+            NavigationManager.NavigateTo("");
+            return;
+        }
+
+        try
+        {
+            // Validate the JWT token
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var validationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("VelikdenPraznik438hjdjjijfn3912ur8ajedojdioahu")),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+
+            var claimsPrincipal = tokenHandler.ValidateToken(tokenString, validationParameters, out SecurityToken validatedToken);
+
+            // Get the product ID from the token claims
+            var productIdClaim = claimsPrincipal.FindFirst("ProductId");
+
+            if (productIdClaim == null || !int.TryParse(productIdClaim.Value, out var productId))
+            {
+                // Throw a custom exception if the product ID is missing or invalid
+                throw new Exception("Invalid product ID");
+            }
+
+            // Retrieve the product from the database using the product ID
+            product = await dbContext.Products.FindAsync(productId);
+
+            if (product == null)
+            {
+                // Redirect the user to the product list page if the product does not exist
+                NavigationManager.NavigateTo("/fishing_accessories");
+                return;
+            }
+        }
+        catch (Exception ex)
+        {
+            // Log the error
+            Console.WriteLine(ex.Message);
+
+            // Redirect the user to the product list page if the JWT token is invalid or cannot be validated
+            NavigationManager.NavigateTo("");
+            return;
+        }
     }
 
-    private async Task AddToCart()
+
+
+    private async Task CreateCartItem()
     {
-        var userId = "12345";
-        int id = int.Parse(productId);
-        await CartService.AddToCart(id, quantity, userId);
-        NavigationManager.NavigateTo($"/shopping_cart");
+        userId = UserService.GetLoggedUserId();
+
+        if(userId != null)
+        {
+            await CartService.AddToCart(product.ProductId, quantity, userId);
+            NavigationManager.NavigateTo($"/shopping_cart");
+        }
+        else
+        {
+            IsUserLogged = false;
+        }
     }
 
 }

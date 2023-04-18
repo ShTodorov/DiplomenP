@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DiplomenP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230411190159_InitialCreate")]
+    [Migration("20230417210313_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -68,7 +68,7 @@ namespace DiplomenP.Migrations
                     b.HasIndex("CartItemProductId")
                         .IsUnique();
 
-                    b.ToTable("CartItem");
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("DiplomenP.Models.Order", b =>

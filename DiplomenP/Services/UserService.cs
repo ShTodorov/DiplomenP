@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using DiplomenP.Models;
 using DiplomenP.Data;
 using DiplomenP.Interfaces;
+using Microsoft.AspNetCore.Components;
 
 namespace DiplomenP.Services
 {
@@ -28,6 +28,15 @@ namespace DiplomenP.Services
             _signInManager = signInManager;
             _emailSender = emailSender;
             _httpContextAccessor = httpContextAccessor;
+        }
+        public string? GetLoggedUserId()
+        {
+            using ApplicationDbContext context = _context.Clone();
+            context.DetachAllEntities();
+            string userName = _httpContextAccessor.HttpContext.User.Identity.Name;
+            User? user = context.Users.SingleOrDefault(x => x.UserName == userName);
+
+            return user?.Id;
         }
 
         /*
@@ -156,19 +165,7 @@ namespace DiplomenP.Services
         }
 
 
-        public User GetLoggedUser()
-        {
-            _context.DetachAllEntities();
-            using ApplicationDbContext context = _context.Clone();
-            context.DetachAllEntities();
-            User? user = context.Users.SingleOrDefault(x => x.UserName == _httpContextAccessor.HttpContext.User.Identity.Name);
-
-            return user;
-
-        }
-
-
-
+        
 
         public bool IsLoggedUserAdmin()
         {
@@ -217,6 +214,6 @@ namespace DiplomenP.Services
 
         */
 
-        
+
     }
 }

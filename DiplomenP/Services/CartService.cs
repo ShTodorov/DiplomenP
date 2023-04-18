@@ -8,11 +8,14 @@ namespace DiplomenP.Services
     public class CartService : ICartService
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CartService(ApplicationDbContext dbContext)
+        public CartService(IHttpContextAccessor httpContextAccessor, ApplicationDbContext dbContext)
         {
+            _httpContextAccessor = httpContextAccessor;
             _dbContext = dbContext;
         }
+
 
         public async Task AddToCart(int productId, int quantity, string customerId)
         {
@@ -57,5 +60,33 @@ namespace DiplomenP.Services
             await _dbContext.SaveChangesAsync();
         }
 
+
+        public async Task<List<CartItem>> GetCartItemsAsync(string userId)
+        {
+            return await _dbContext.CartItems
+                .Include(ci => ci.CartItemProduct)
+                .Where(ci => ci.Cart.CartCustomerId == userId)
+                .ToListAsync();
+        }
+
+
+        public async Task RemoveCartItemAsync(int cartItemId)
+        {
+            var cartItem = await _dbContext.CartItems.FindAsync(cartItemId);
+            _dbContext.CartItems.Remove(cartItem);
+            await _dbContext.SaveChangesAsync();
+        }
+
+
+        public async Task ClearCartAsync(string userId)
+        {
+            var cart = await _dbContext.Carts
+                .Include(c => c.Items)
+                .FirstOrDefaultAsync(c => c.CartCustomerId == userId);
+            _dbContext.CartItems.RemoveRange(cart.Items);
+            await _dbContext.SaveChangesAsync();
+        }
+
     }
+
 }

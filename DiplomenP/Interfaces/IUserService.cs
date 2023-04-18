@@ -4,7 +4,6 @@ namespace DiplomenP.Interfaces
 {
     public interface IUserService
     {
-
         /*
 
         Task<string> CreateApplicationUser(User user, String Password);
@@ -13,8 +12,7 @@ namespace DiplomenP.Interfaces
         Task<User> GetApplicationUserByIdAsync(string Id);
         Task<User> GetApplicationUserByUsernameAsync(string Username);
         Task UpdateApplicationUser(User user);
-        User GetLoggedUser();
-
+        
         bool IsLoggedUserAdmin();
         void Login(string username, string password, bool rememberMe);
         void Logout();
@@ -23,6 +21,6 @@ namespace DiplomenP.Interfaces
         Task<IList<string>> GetRoleAsync(User user);
 
         */
-
+        string? GetLoggedUserId();
     }
 }

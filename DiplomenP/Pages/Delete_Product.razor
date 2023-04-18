@@ -1,4 +1,5 @@
-﻿@page "/delete_product"
+﻿@attribute [Authorize(Roles = "Admin")]
+@page "/delete_product"
 @using DiplomenP.Interfaces;
 @using DiplomenP.Models;
 

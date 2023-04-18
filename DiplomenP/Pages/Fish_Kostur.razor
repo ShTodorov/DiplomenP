@@ -1,4 +1,6 @@
 ﻿@page "/Костур"
+@using DiplomenP.Interfaces;
+@using DiplomenP.Models;
 
 <PageTitle>Костур</PageTitle>
 
@@ -105,3 +107,78 @@
     </h3>
 
 </div>
+
+<div class="container mydiv">
+    <div class="row d-flex">
+
+        @foreach (var product in products)
+        {
+
+            if (product.ProductName == "Shimano Beastmaster FX Predator Въдица" || product.ProductName == "Shimano Sedona 2500S FI" ||
+            product.ProductName == "Linesystem KAWAHAGI PE X8" || product.ProductName == "Джиг глави JAXON SUMATO BLACK" ||
+            product.ProductName == "Комплект Силиконови Примамки MIKADO SPEEDO 4.5 СМ" || product.ProductName == "Owner HOOKED SNAP SWIVEL")
+            {
+
+                        <div class="col-md-6 col-lg-4 col-xl-3">
+
+                            <!-- bbb_deals -->
+
+                            <div class="bbb_deals">
+                                <div class="bbb_deals_slider_container">
+                                    <div class=" bbb_deals_item">
+                                        <div class="bbb_deals_image"><img src="@product.Image" alt="product.img"></div>
+                                        <div class="bbb_deals_content">
+                                            <div class="bbb_deals_info_line d-flex flex-row justify-content-between">
+                                                <div class="bbb_deals_item_category text-secondary">@product.Type</div>
+                                                <div class="bbb_deals_item_category text-secondary">@product.Brand</div>
+                                            </div>
+                                            <div class="bbb_deals_info_line">
+                                                <div class="bbb_deals_item_name">@product.ProductName</div>
+                                            </div>
+                                            <div class="bbb_deals_info_line d-flex flex-row justify-content-start">
+                                                <div class="bbb_deals_item_price ml-auto">@product.Price.ToString("0.00") лв.</div>
+                                            </div>
+                                            <div class="available">
+                                                <div class="available_line d-flex flex-row justify-content-start">
+                                                    <div class="available_title">Налични: <span>@product.ProductCount</span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+            }
+
+        }
+
+    </div>
+</div>
+
+<div class="d-flex flex-column align-items-center justify-content-center container-custom mb-1">
+    <button class="btn btn-outline-dark flex-shrink-0" type="button" @onclick="AddComToCart">
+        <i class="bi-cart-fill me-1"></i>
+        Добави комплект
+    </button>
+</div>
+
+@code {
+
+    [Inject]
+    private IProductService ProductService { get; set; }
+
+    private List<Product> products = new List<Product>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = ProductService.GetProducts();
+    }
+
+    private void AddComToCart()
+    {
+
+    }
+
+}

@@ -66,7 +66,7 @@ namespace DiplomenP.Migrations
                     b.HasIndex("CartItemProductId")
                         .IsUnique();
 
-                    b.ToTable("CartItem");
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("DiplomenP.Models.Order", b =>
