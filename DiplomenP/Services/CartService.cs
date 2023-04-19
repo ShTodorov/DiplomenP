@@ -87,6 +87,24 @@ namespace DiplomenP.Services
             await _dbContext.SaveChangesAsync();
         }
 
+
+        public async Task<int> GetCartId(string userId)
+        {
+            var cart = await _dbContext.Carts.FirstOrDefaultAsync(c => c.CartCustomerId == userId);
+            return cart.CartId;
+        }
+
+
+        public async Task<double> GetCartTotalPriceAsync(int cartId)
+        {
+            var cartItems = await _dbContext.CartItems
+                .Where(ci => ci.CartId == cartId)
+                .Include(ci => ci.CartItemProduct)
+                .ToListAsync();
+
+            return cartItems.Sum(ci => ci.Quantity * ci.CartItemProduct.Price);
+        }
+
     }
 
 }

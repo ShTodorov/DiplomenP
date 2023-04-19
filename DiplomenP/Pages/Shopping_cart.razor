@@ -2,6 +2,7 @@
 @using DiplomenP.Interfaces;
 @using DiplomenP.Models;
 @inject IUserService UserService
+@inject IOrderService OrderService
 
 <PageTitle>Shopping cart</PageTitle>
 
@@ -104,11 +105,11 @@
                 <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Инструкции към поръчката</div>
                 <div class="p-4">
                         <p class="mb-2"><em>Адрес на поръчката:</em></p>
-                  <input type="text" class="mb-3 form-control">
+                  <input type="text" class="mb-3 form-control" @bind-value="order.Adress" required>
                         <p class="mb-2"><em>Телефон на получател:</em></p>
-                  <input type="text" class="mb-3 form-control">
+                  <input type="text" class="mb-3 form-control" @bind-value="order.PhoneNumber" required>
                         <p class="mb-2"><em>Ако искате да дадете пояснение към поръчката си, може да го напишето в полето отдолу:</em></p>
-                  <textarea name="" cols="30" rows="2" class="form-control"></textarea>
+                  <textarea name="" cols="30" rows="2" class="form-control" @bind="order.OrderDescription"></textarea>
                 </div>
               </div>
               <div class="col-lg-6">
@@ -116,12 +117,12 @@
                 <div class="p-4">
                         <p class="mb-4"><em>Доставката се изчислява спрямо цената на поръчката.</em></p>
                   <ul class="list-unstyled mb-4">
-                    <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Цена на поръчката</strong><strong>$390.00</strong></li>
-                    <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Доставка</strong><strong>$10.00</strong></li>
+                    <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Цена на поръчката</strong><strong>@totalItemsPrice.ToString("0.00") лв.</strong></li>
+                    <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Доставка</strong><strong>10 лв.</strong></li>
                     <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Общо</strong>
-                      <h5 class="font-weight-bold">$400.00</h5>
+                      <h5 class="font-weight-bold">@order.TotalOrderPrice.ToString("0.00") лв.</h5>
                     </li>
-                  </ul><a href="#" class="btn btn-dark rounded-pill py-2 btn-block">Поръчване</a>
+                  </ul><a href="" class="btn btn-dark rounded-pill py-2 btn-block" @onclick="CreateOrder">Поръчване</a>
                 </div>
               </div>
             </div>
@@ -135,22 +136,36 @@
 }
 else
 {
-    <h3>За да видите количката, трябва да влезете в профила си. А ако сте влезнали, трябва да добавите продукт.</h3>
+    <h3>За да видите количката, трябва да влезете в профила си.</h3>
 }
 
 @code{
+
+    // Показване на CartItems в количката за регистрирания потребител
 
     [Inject]
     private ICartService CartService { get; set; }
 
     private List<CartItem> cartItems = new List<CartItem>();
 
-    private string? userId; 
+    private string? userId;
+
+    private Order order = new Order();
+    private int deliveryPrice;
+    private double totalOrderPrice;
+    private int cartId;
+    private double totalItemsPrice;
 
     protected override async Task OnInitializedAsync()
     {
         userId = UserService.GetLoggedUserId();
         cartItems = await CartService.GetCartItemsAsync(userId);
+        if (userId != null)
+        {
+            cartId = await CartService.GetCartId(userId);
+            totalItemsPrice = await CartService.GetCartTotalPriceAsync(cartId);
+        }
+
     }
 
     private async Task RemoveCartItem(int cartItemId)
@@ -158,7 +173,33 @@ else
         await CartService.RemoveCartItemAsync(cartItemId);
 
         cartItems = await CartService.GetCartItemsAsync(userId);
+        totalItemsPrice = await CartService.GetCartTotalPriceAsync(cartId);
         StateHasChanged();
+    }
+
+    //Създване на запис в Order
+
+    
+
+    private async Task CreateOrder()
+    {
+        if (totalItemsPrice > 100)
+        {
+            deliveryPrice = 0;
+        }
+        else
+        {
+            deliveryPrice = 10;
+        }
+
+        totalOrderPrice = totalItemsPrice + deliveryPrice;
+
+        order.OrderDate = DateTime.Now;
+        order.TotalOrderPrice = totalOrderPrice;
+        order.OrderCartId = cartId;
+        order.OrderCustomerId = userId;
+
+        await OrderService.CreateOrderAsync(order);
     }
 
 }

@@ -49,6 +49,7 @@ namespace DiplomenP.Data
                 .WithOne(c => c.Cart)
                 .OnDelete(DeleteBehavior.Restrict);
 
+
             /*
 
             modelBuilder.Entity<Cart>()

@@ -67,7 +67,7 @@
                                     </div>
                                     <div class="cart_content">
                                         <div class="cart_text"><a href="shopping_cart">Cart</a></div>
-                                        <div class="cart_price">$185</div>
+                                        <div class="cart_price">@totalItemPrice</div>
                                     </div>
                                 </div>
                             </div>
@@ -86,3 +86,14 @@
 <main class="container main">
     @Body
 </main>
+
+@code{
+
+    private double totalItemPrice;
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+    }
+
+}
