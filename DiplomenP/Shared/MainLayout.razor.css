@@ -492,7 +492,7 @@ section {
 }
 
 .logo_container {
-    height: 80px;
+    height: 30px !important;
 }
 
 .logo {
@@ -719,6 +719,11 @@ select {
     cursor: pointer;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
+}
+
+.search_img{
+    height: 100%;
+    color: white;
 }
 
 .wishlist_cart {

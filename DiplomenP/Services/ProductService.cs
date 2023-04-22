@@ -2,6 +2,7 @@
 using DiplomenP.Interfaces;
 using DiplomenP.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace DiplomenP.Services
 {
@@ -38,6 +39,22 @@ namespace DiplomenP.Services
             return _dbContext.Products.ToList();
 
         }
+
+
+        public List<Product> SearchProducts(string pattern)
+        {
+            var products = _dbContext.Products.ToList();
+
+            if (!string.IsNullOrEmpty(pattern))
+            {
+                products = products.Where(p => Regex.IsMatch(p.ProductName, pattern, RegexOptions.IgnoreCase) ||
+                                               Regex.IsMatch(p.Brand, pattern, RegexOptions.IgnoreCase))
+                                   .ToList();
+            }
+
+            return products;
+        }
+
 
         public async Task<bool> UpdateProductByName(string name, double? newPrice, int? newCount)
         {

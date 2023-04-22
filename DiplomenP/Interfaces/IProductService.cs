@@ -13,5 +13,6 @@ namespace DiplomenP.Interfaces
         Task<bool> ProductExists(string productName);
 
         Task DeleteProductAsync(int productId);
+        List<Product> SearchProducts(string pattern);
     }
 }

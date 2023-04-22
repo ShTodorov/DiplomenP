@@ -1,0 +1,100 @@
+﻿@page "/searchResult/{pattern}"
+@using DiplomenP.Interfaces;
+@using DiplomenP.Models;
+@using System.IdentityModel.Tokens.Jwt;
+@using Microsoft.IdentityModel.Tokens;
+@using System.Text;
+@using System.Security.Claims;
+@using System.Diagnostics;
+@inject NavigationManager NavigationManager
+
+<PageTitle>Търсене</PageTitle>
+
+<h3>Резултат от търсенето:</h3>
+@if (products?.Count > 0)
+{
+    <div class="container mydiv">
+        <div class="row d-flex">
+
+            @foreach (var product in products)
+            {
+
+                <div class="col-md-6 col-lg-4 col-xl-3">
+
+                    <!-- bbb_deals -->
+
+                    <div class="bbb_deals" @onclick="() => ViewProductDetails(product)">
+                        <div class="bbb_deals_slider_container">
+                            <div class=" bbb_deals_item">
+                                <div class="bbb_deals_image"><img src="@product.Image" alt="product.img"></div>
+                                <div class="bbb_deals_content">
+                                    <div class="bbb_deals_info_line d-flex flex-row justify-content-between">
+                                        <div class="bbb_deals_item_category text-secondary">@product.Type</div>
+                                        <div class="bbb_deals_item_category text-secondary">@product.Brand</div>
+                                    </div>
+                                    <div class="bbb_deals_info_line">
+                                        <div class="bbb_deals_item_name">@product.ProductName</div>
+                                    </div>
+                                    <div class="bbb_deals_info_line d-flex flex-row justify-content-start">
+                                        <div class="bbb_deals_item_price ml-auto">@product.Price.ToString("0.00") лв.</div>
+                                    </div>
+                                    <div class="available">
+                                        <div class="available_line d-flex flex-row justify-content-start">
+                                            <div class="available_title">Налични: <span>@product.ProductCount</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            }
+
+        </div>
+    </div>
+}
+else
+{
+    <h3>Няма намерени продукти.</h3>
+}
+
+@code {
+
+    [Parameter]
+    public string pattern { get; set; }
+
+    [Inject]
+    private IProductService ProductService { get; set; }
+
+    private List<Product> products = new List<Product>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = ProductService.SearchProducts(pattern);
+    }
+
+    private void ViewProductDetails(Product product)
+    {
+        var claims = new[]
+        {
+        new Claim("ProductId", product.ProductId.ToString())
+    };
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("VelikdenPraznik438hjdjjijfn3912ur8ajedojdioahu"));
+        var token = tokenHandler.CreateJwtSecurityToken(
+            subject: new ClaimsIdentity(claims),
+            expires: DateTime.UtcNow.AddDays(1),
+            signingCredentials: new SigningCredentials(
+                key,
+                SecurityAlgorithms.HmacSha256Signature)
+        );
+
+        var tokenString = tokenHandler.WriteToken(token);
+
+        NavigationManager.NavigateTo($"/product_page?token={tokenString}");
+    }
+
+}
