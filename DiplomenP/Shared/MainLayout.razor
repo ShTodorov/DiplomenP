@@ -1,4 +1,7 @@
-﻿@inherits LayoutComponentBase
+﻿@using DiplomenP.Interfaces;
+@using DiplomenP.Models;
+@using DiplomenP.Services;
+@inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
 
 <PageTitle>Primer</PageTitle>
@@ -51,7 +54,8 @@
                                     <form action="#" class="header_search_form clearfix">
                                         <input type="search" required="required" class="header_search_input" @bind="pattern" placeholder="Search for products...">
                                         <button type="submit" class="header_search_button trans_300 text-center" @onclick="Search">
-                                            <img class="search_img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/VisualEditor_-_Icon_-_Search-big_-_white.svg/1200px-VisualEditor_-_Icon_-_Search-big_-_white.svg.png" alt="search"></button>
+                                            <img class="search_img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/VisualEditor_-_Icon_-_Search-big_-_white.svg/1200px-VisualEditor_-_Icon_-_Search-big_-_white.svg.png" alt="search">
+                                        </button>
                                     </form>
                                 </div>
                             </div>
@@ -65,7 +69,7 @@
                                 <div class="cart_container d-flex flex-row align-items-center justify-content-end">
                                     <div class="cart_icon">
                                         <img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1560918704/cart.png" alt="cart">
-                                        <div class="cart_count"><span>0</span></div>
+                                        <div class="cart_count"><span>@(itemCount)</span></div>
                                     </div>
                                     <div class="cart_content">
                                         <div class="cart_text"><a href="shopping_cart">Cart</a></div>
@@ -78,9 +82,9 @@
                 </div>
             </div>
         </div>
-           
+
         <NavMenu></NavMenu>
-        
+
     </header>
 
 </div>
@@ -89,15 +93,38 @@
     @Body
 </main>
 
-@code{
+@code {
 
     private string pattern { get; set; }
 
     private double totalItemsPrice;
+    [Inject]
+    private ICartService CartService { get; set; }
+    [Inject]
+    private IUserService UserService { get; set; }
+
+    private List<CartItem> cartItems = new List<CartItem>();
+
+    private string? userId;
+
+    private int cartId = 0;
+
+    private int itemCount = 0;
 
     protected override async Task OnInitializedAsync()
     {
-        
+        userId = UserService.GetLoggedUserId();
+        if (userId != null)
+        {
+            cartItems = await CartService.GetCartItemsAsync(userId);
+            cartId = await CartService.GetCartId(userId);
+            foreach (var item in cartItems)
+            {
+                itemCount += item.Quantity;
+            }
+            totalItemsPrice = await CartService.GetCartTotalPriceAsync(cartId);
+        }
+
     }
 
     private void Search()

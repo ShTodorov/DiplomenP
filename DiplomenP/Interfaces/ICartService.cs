@@ -10,5 +10,6 @@ namespace DiplomenP.Interfaces
         Task<List<CartItem>> GetCartItemsAsync(string userId);
         Task<double> GetCartTotalPriceAsync(int cartId);
         Task RemoveCartItemAsync(int cartItemId);
+        Task UpdateCartItemAsync(CartItem cartItem);
     }
 }

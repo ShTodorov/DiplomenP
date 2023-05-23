@@ -64,10 +64,9 @@ namespace DiplomenP.Services
 
         public async Task<List<CartItem>> GetCartItemsAsync(string userId)
         {
-            return await _dbContext.CartItems
+            return _dbContext.CartItems
                 .Include(ci => ci.CartItemProduct)
-                .Where(ci => ci.Cart.CartCustomerId == userId)
-                .ToListAsync();
+                .Where(ci => ci.Cart.CartCustomerId == userId).AsNoTracking().ToList();
         }
 
 
@@ -98,12 +97,20 @@ namespace DiplomenP.Services
 
         public async Task<double> GetCartTotalPriceAsync(int cartId)
         {
-            var cartItems = await _dbContext.CartItems
+            var cartItems = _dbContext.Clone().CartItems
                 .Where(ci => ci.CartId == cartId)
-                .Include(ci => ci.CartItemProduct)
-                .ToListAsync();
+                .Include(ci => ci.CartItemProduct).AsNoTracking()
+                .ToList();
 
             return cartItems.Sum(ci => ci.Quantity * ci.CartItemProduct.Price);
+        }
+        public async Task UpdateCartItemAsync(CartItem cartItem)
+        {
+
+            _dbContext.DetachAllEntities();
+
+            _dbContext.CartItems.Update(cartItem);
+            await _dbContext.SaveChangesAsync();
         }
 
     }

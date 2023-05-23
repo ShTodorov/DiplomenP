@@ -3,11 +3,12 @@
 @using DiplomenP.Models;
 @inject IUserService UserService
 @inject IOrderService OrderService
+@inject NavigationManager NavigationManager
 
 <PageTitle>Shopping cart</PageTitle>
 
 <style>
-    span{
+    span {
         font-weight: normal;
     }
 </style>
@@ -26,7 +27,6 @@
     .col-lg-12 {
         padding: 0 !important;
     }
-        
 </style>
 
 <style type="text/css" media="screen and (max-width:425px)">
@@ -84,7 +84,7 @@
                                             </th>
                                             <td class="border-0 align-middle price"><strong>@item.CartItemProduct.Price.ToString("0.00")</strong></td>
                                             <td class="border-0 align-middle">
-                                                <input class="form-control text-center" @bind-value="item.Quantity" style="width: 3rem;" />
+                                                <input class="form-control text-center" value="@item.Quantity" @onchange="(ChangeEventArgs e) => UpdateItem(e,item)" style="width: 3rem;" />
                                             </td>
                                             <td class="border-0 align-middle">
                                                 <button class="btn btn-outline-danger flex-shrink-0" @onclick="() => RemoveCartItem(item.CartItemId)" type="button">–</button>
@@ -93,43 +93,44 @@
 
                                     }
 
-                    </tbody>
-                  </table>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- End -->
+                    </div>
                 </div>
-                <!-- End -->
-              </div>
-            </div>
-      
-            <div class="row py-5 p-4 bg-white rounded shadow-sm">
-              <div class="col-lg-6">
-                <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Инструкции към поръчката</div>
-                <div class="p-4">
-                        <p class="mb-2"><em>Адрес на поръчката:</em></p>
-                  <input type="text" class="mb-3 form-control" @bind-value="order.Adress" required>
-                        <p class="mb-2"><em>Телефон на получател:</em></p>
-                  <input type="text" class="mb-3 form-control" @bind-value="order.PhoneNumber" required>
-                        <p class="mb-2"><em>Ако искате да дадете пояснение към поръчката си, може да го напишето в полето отдолу:</em></p>
-                  <textarea name="" cols="30" rows="2" class="form-control" @bind="order.OrderDescription"></textarea>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Вашата поръчка</div>
-                <div class="p-4">
-                        <p class="mb-4"><em>Доставката се изчислява спрямо цената на поръчката.</em></p>
-                  <ul class="list-unstyled mb-4">
-                    <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Цена на поръчката</strong><strong>@totalItemsPrice.ToString("0.00") лв.</strong></li>
-                    <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Доставка</strong><strong>@deliveryPrice</strong></li>
-                    <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Общо</strong>
-                      <h5 class="font-weight-bold">@totalOrderPrice.ToString("0.00") лв.</h5>
-                    </li>
-                  </ul><a href="" class="btn btn-dark rounded-pill py-2 btn-block" @onclick="CreateOrder">Поръчване</a>
-                </div>
-              </div>
-            </div>
 
-            <p class="mt-3 text-center text-secondary"><b>Ако искате да видите история на покупките си, натиснете <a href="cart_history">тук</a>.</b></p>
-      
-          </div>
+                <div class="row py-5 p-4 bg-white rounded shadow-sm">
+                    <div class="col-lg-6">
+                        <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Инструкции към поръчката</div>
+                        <div class="p-4">
+                            <p class="mb-2"><em>Адрес на поръчката:</em></p>
+                            <input type="text" class="mb-3 form-control" @bind-value="order.Adress" required>
+                            <p class="mb-2"><em>Телефон на получател:</em></p>
+                            <input type="text" class="mb-3 form-control" @bind-value="order.PhoneNumber" required>
+                            <p class="mb-2"><em>Ако искате да дадете пояснение към поръчката си, може да го напишето в полето отдолу:</em></p>
+                            <textarea name="" cols="30" rows="2" class="form-control" @bind="order.OrderDescription"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Вашата поръчка</div>
+                        <div class="p-4">
+                            <p class="mb-4"><em>Доставката се изчислява спрямо цената на поръчката.</em></p>
+                            <ul class="list-unstyled mb-4">
+                                <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Цена на поръчката</strong><strong>@totalItemsPrice.ToString("0.00") лв.</strong></li>
+                                <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Доставка</strong><strong>@deliveryPrice</strong></li>
+                                <li class="d-flex justify-content-between py-3 border-bottom">
+                                    <strong class="text-muted">Общо</strong>
+                                    <h5 class="font-weight-bold">@totalOrderPrice.ToString("0.00") лв.</h5>
+                                </li>
+                            </ul><a href="" class="btn btn-dark rounded-pill py-2 btn-block" @onclick="CreateOrder">Поръчване</a>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="mt-3 text-center text-secondary"><b>Ако искате да видите история на покупките си, натиснете <a href="cart_history">тук</a>.</b></p>
+
+            </div>
         </div>
     </div>
 
@@ -139,13 +140,13 @@ else
     <h3>За да видите количката, трябва да влезете в профила си или да добавите продукт.</h3>
 }
 
-@code{
+@code {
 
     // Показване на CartItems в количката за регистрирания потребител
 
     [Inject]
     private ICartService CartService { get; set; }
-
+   
     private List<CartItem> cartItems = new List<CartItem>();
 
     private string? userId;
@@ -158,10 +159,17 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        await RefreshData();
+
+
+    }
+    private async Task RefreshData()
+    {
         userId = UserService.GetLoggedUserId();
         cartItems = await CartService.GetCartItemsAsync(userId);
         if (userId != null)
         {
+
             cartId = await CartService.GetCartId(userId);
             totalItemsPrice = await CartService.GetCartTotalPriceAsync(cartId);
 
@@ -176,7 +184,7 @@ else
 
             totalOrderPrice = totalItemsPrice + deliveryPrice;
         }
-
+        
     }
 
     private async Task RemoveCartItem(int cartItemId)
@@ -185,12 +193,22 @@ else
 
         cartItems = await CartService.GetCartItemsAsync(userId);
         totalItemsPrice = await CartService.GetCartTotalPriceAsync(cartId);
+        await RefreshData();
+        NavigationManager.NavigateTo($"/shopping_cart", forceLoad: true);
         StateHasChanged();
     }
 
-    //Създване на запис в Order
 
-    
+    private async Task UpdateItem(ChangeEventArgs args, CartItem item)
+    {
+        // Update the item quantity with the new value from the input element
+        item.Quantity = int.Parse(args.Value.ToString());
+        await CartService.UpdateCartItemAsync(item);
+        await RefreshData();
+        NavigationManager.NavigateTo($"/shopping_cart", forceLoad: true);
+        StateHasChanged();
+        //TODO: Update cart item method
+    }
 
     private async Task CreateOrder()
     {
