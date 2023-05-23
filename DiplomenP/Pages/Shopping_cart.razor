@@ -191,8 +191,6 @@ else
     {
         await CartService.RemoveCartItemAsync(cartItemId);
 
-        cartItems = await CartService.GetCartItemsAsync(userId);
-        totalItemsPrice = await CartService.GetCartTotalPriceAsync(cartId);
         await RefreshData();
         NavigationManager.NavigateTo($"/shopping_cart", forceLoad: true);
         StateHasChanged();
