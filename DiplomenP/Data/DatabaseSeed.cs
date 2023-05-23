@@ -26,7 +26,8 @@ namespace DiplomenP.Data
                 var adminUser = new User
                 {
                     UserName = "admin@example.com",
-                    Email = "admin@example.com"
+                    Email = "admin@example.com", 
+                    EmailConfirmed= true,
                 };
                 var result = await userManager.CreateAsync(adminUser, "AdminPassword123!");
                 if (result.Succeeded)
@@ -41,7 +42,8 @@ namespace DiplomenP.Data
                 var regularUser = new User
                 {
                     UserName = "user@example.com",
-                    Email = "user@example.com"
+                    Email = "user@example.com",
+                    EmailConfirmed= true,
                 };
                 var result = await userManager.CreateAsync(regularUser, "UserPassword123!");
                 if (result.Succeeded)

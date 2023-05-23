@@ -14,7 +14,7 @@ namespace DiplomenP.Models
 
         public virtual ICollection<CartItem> Items { get; set; }
 
-        public Order Order { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
 
     }
 

@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using RequiredAttribute = System.ComponentModel.DataAnnotations.RequiredAttribute;
 
@@ -13,14 +12,11 @@ namespace DiplomenP.Models
 
         [Required]
         public int Quantity { get; set; }
-
-        [ForeignKey("CartItemProductId")]
         public virtual Product CartItemProduct { get; set; }
         public int CartItemProductId { get; set; }
-
-        [ForeignKey("CartId")]
         public virtual Cart Cart { get; set; }
         public int CartId { get; set; }
+
 
     }
 }

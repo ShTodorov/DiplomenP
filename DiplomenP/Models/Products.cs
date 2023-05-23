@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DiplomenP.Models
 {
@@ -37,7 +38,8 @@ namespace DiplomenP.Models
         [StringLength(50, ErrorMessage = "Brand cannot be longer than 50 characters")]
         public string Brand { get; set; }
 
-        public CartItem CartItems { get; set; }
+        public virtual ICollection<CartItem> CartItems { get; set; }
+        
     }
 
 }

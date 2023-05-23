@@ -33,6 +33,7 @@ namespace DiplomenP.Services
                     Items = new List<CartItem>()
                 };
                 _dbContext.Carts.Add(cart);
+                await _dbContext.SaveChangesAsync();
             }
 
             // Check if the selected product is already in the cart
@@ -72,7 +73,7 @@ namespace DiplomenP.Services
 
         public async Task RemoveCartItemAsync(int cartItemId)
         {
-            var cartItem = await _dbContext.CartItems.FindAsync(cartItemId);
+            var cartItem = await _dbContext.CartItems.FirstOrDefaultAsync(x => x.CartItemId == cartItemId);
             _dbContext.CartItems.Remove(cartItem);
             await _dbContext.SaveChangesAsync();
         }

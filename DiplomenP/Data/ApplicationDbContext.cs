@@ -27,16 +27,15 @@ namespace DiplomenP.Data
                 .HasColumnType("decimal(18,2)");
 
             modelBuilder.Entity<Order>()
-                .HasOne(c => c.OrderCart)
-                .WithOne(o => o.Order)
-                .HasForeignKey<Order>(k => k.OrderCartId)
-                .OnDelete(DeleteBehavior.Restrict);
-
+                 .HasKey(aup => new { aup.OrderCartId, aup.OrderCustomerId });
             modelBuilder.Entity<Order>()
-                .HasOne(c => c.OrderCustomer)
-                .WithOne(o => o.Order)
-                .HasForeignKey<Order>(k => k.OrderCustomerId)
-                .OnDelete(DeleteBehavior.Cascade);
+                 .HasOne(aup => aup.OrderCart)
+                 .WithMany(u => u.Orders)
+                 .HasForeignKey(aup => aup.OrderCartId).OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Order>()
+                .HasOne(aup => aup.OrderCustomer)
+                .WithMany(p => p.Orders)
+                .HasForeignKey(aup => aup.OrderCustomerId).OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Cart>()
                 .HasOne(c => c.CartCustomer)
@@ -49,6 +48,16 @@ namespace DiplomenP.Data
                 .WithOne(c => c.Cart)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<CartItem>()
+                 .HasKey(aup => new { aup.CartId, aup.CartItemProductId });
+            modelBuilder.Entity<CartItem>()
+                 .HasOne(aup => aup.CartItemProduct)
+                 .WithMany(u => u.CartItems)
+                 .HasForeignKey(aup => aup.CartItemProductId).OnDelete(DeleteBehavior.NoAction);
+             modelBuilder.Entity<CartItem>()
+                .HasOne(aup => aup.Cart)
+                .WithMany(p => p.Items)
+                .HasForeignKey(aup => aup.CartItemId).OnDelete(DeleteBehavior.NoAction);
 
             /*
 

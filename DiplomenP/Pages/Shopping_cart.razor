@@ -37,9 +37,9 @@
 
 </style>
 
-@if (userId != null && cartItems.Count > 0)
+@if (userId != null && cartItems.Count > 0 && cartId != null)
 {
-
+    //TODO: Прошерка за несъщестшушеаща колиюка
     <div class="px-4 px-lg-0">
 
         <div class="pb-5 mt-2">
@@ -118,9 +118,9 @@
                         <p class="mb-4"><em>Доставката се изчислява спрямо цената на поръчката.</em></p>
                   <ul class="list-unstyled mb-4">
                     <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Цена на поръчката</strong><strong>@totalItemsPrice.ToString("0.00") лв.</strong></li>
-                    <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Доставка</strong><strong>10 лв.</strong></li>
+                    <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Доставка</strong><strong>@deliveryPrice</strong></li>
                     <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Общо</strong>
-                      <h5 class="font-weight-bold">@order.TotalOrderPrice.ToString("0.00") лв.</h5>
+                      <h5 class="font-weight-bold">@totalOrderPrice.ToString("0.00") лв.</h5>
                     </li>
                   </ul><a href="" class="btn btn-dark rounded-pill py-2 btn-block" @onclick="CreateOrder">Поръчване</a>
                 </div>
@@ -164,6 +164,17 @@ else
         {
             cartId = await CartService.GetCartId(userId);
             totalItemsPrice = await CartService.GetCartTotalPriceAsync(cartId);
+
+            if (totalItemsPrice > 100)
+            {
+                deliveryPrice = 0;
+            }
+            else
+            {
+                deliveryPrice = 10;
+            }
+
+            totalOrderPrice = totalItemsPrice + deliveryPrice;
         }
 
     }
@@ -183,17 +194,6 @@ else
 
     private async Task CreateOrder()
     {
-        if (totalItemsPrice > 100)
-        {
-            deliveryPrice = 0;
-        }
-        else
-        {
-            deliveryPrice = 10;
-        }
-
-        totalOrderPrice = totalItemsPrice + deliveryPrice;
-
         order.OrderDate = DateTime.Now;
         order.TotalOrderPrice = totalOrderPrice;
         order.OrderCartId = cartId;

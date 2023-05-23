@@ -10,7 +10,7 @@ namespace DiplomenP.Models
         [NotMapped]
         public int Role { get; set; }
 
-        public Order Order { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
 
         public Cart Cart { get; set; }
 

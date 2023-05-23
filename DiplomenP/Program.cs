@@ -6,6 +6,7 @@ using DiplomenP.Models;
 using DiplomenP.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,12 +23,14 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+_ = builder.Services.AddTransient<IEmailSender, EmailSender>(i => new EmailSender(builder.Configuration["EmailSender:Host"], 
+    builder.Configuration.GetValue<int>("EmailSender:Port"), builder.Configuration.GetValue<bool>("EmailSender:EnableSSL"), 
+    builder.Configuration["EmailSender:UserName"], builder.Configuration["EmailSender:Password"]));
 
-
- builder.Services.AddDefaultIdentity<User>(options =>
+builder.Services.AddDefaultIdentity<User>(options =>
 {
-    options.SignIn.RequireConfirmedAccount = false;
-    options.SignIn.RequireConfirmedEmail = false;
+    options.SignIn.RequireConfirmedAccount = true;
+    options.SignIn.RequireConfirmedEmail = true;
 }).AddErrorDescriber<LocalizedIdentityErrorDescriber>().AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 var app = builder.Build();

@@ -196,58 +196,52 @@ namespace DiplomenP.Migrations
                 name: "CartItems",
                 columns: table => new
                 {
-                    CartItemId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
                     CartItemProductId = table.Column<int>(type: "int", nullable: false),
-                    CartId = table.Column<int>(type: "int", nullable: false)
+                    CartId = table.Column<int>(type: "int", nullable: false),
+                    CartItemId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CartItems", x => x.CartItemId);
+                    table.PrimaryKey("PK_CartItems", x => new { x.CartId, x.CartItemProductId });
                     table.ForeignKey(
-                        name: "FK_CartItems_Carts_CartId",
-                        column: x => x.CartId,
+                        name: "FK_CartItems_Carts_CartItemId",
+                        column: x => x.CartItemId,
                         principalTable: "Carts",
-                        principalColumn: "CartId",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "CartId");
                     table.ForeignKey(
                         name: "FK_CartItems_Products_CartItemProductId",
                         column: x => x.CartItemProductId,
                         principalTable: "Products",
-                        principalColumn: "ProductId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ProductId");
                 });
 
             migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
-                    OrderId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrderCartId = table.Column<int>(type: "int", nullable: false),
+                    OrderCustomerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    OrderId = table.Column<int>(type: "int", nullable: false),
                     OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Adress = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<int>(type: "int", nullable: false),
                     OrderDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TotalOrderPrice = table.Column<double>(type: "float", nullable: false),
-                    OrderCartId = table.Column<int>(type: "int", nullable: false),
-                    OrderCustomerId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    TotalOrderPrice = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Orders", x => x.OrderId);
+                    table.PrimaryKey("PK_Orders", x => new { x.OrderCartId, x.OrderCustomerId });
                     table.ForeignKey(
                         name: "FK_Orders_AspNetUsers_OrderCustomerId",
                         column: x => x.OrderCustomerId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Orders_Carts_OrderCartId",
                         column: x => x.OrderCartId,
                         principalTable: "Carts",
-                        principalColumn: "CartId",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "CartId");
                 });
 
             migrationBuilder.CreateIndex(
@@ -290,15 +284,14 @@ namespace DiplomenP.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CartItems_CartId",
+                name: "IX_CartItems_CartItemId",
                 table: "CartItems",
-                column: "CartId");
+                column: "CartItemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CartItems_CartItemProductId",
                 table: "CartItems",
-                column: "CartItemProductId",
-                unique: true);
+                column: "CartItemProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Carts_CartCustomerId",
@@ -307,16 +300,9 @@ namespace DiplomenP.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_OrderCartId",
-                table: "Orders",
-                column: "OrderCartId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Orders_OrderCustomerId",
                 table: "Orders",
-                column: "OrderCustomerId",
-                unique: true);
+                column: "OrderCustomerId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

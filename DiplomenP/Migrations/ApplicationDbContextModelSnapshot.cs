@@ -44,50 +44,38 @@ namespace DiplomenP.Migrations
 
             modelBuilder.Entity("DiplomenP.Models.CartItem", b =>
                 {
-                    b.Property<int>("CartItemId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartItemId"), 1L, 1);
-
                     b.Property<int>("CartId")
                         .HasColumnType("int");
 
                     b.Property<int>("CartItemProductId")
                         .HasColumnType("int");
 
+                    b.Property<int>("CartItemId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("CartItemId");
+                    b.HasKey("CartId", "CartItemProductId");
 
-                    b.HasIndex("CartId");
+                    b.HasIndex("CartItemId");
 
-                    b.HasIndex("CartItemProductId")
-                        .IsUnique();
+                    b.HasIndex("CartItemProductId");
 
                     b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("DiplomenP.Models.Order", b =>
                 {
-                    b.Property<int>("OrderId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int?>("OrderCartId")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"), 1L, 1);
+                    b.Property<string>("OrderCustomerId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Adress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("OrderCartId")
-                        .IsRequired()
-                        .HasColumnType("int");
-
-                    b.Property<string>("OrderCustomerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
@@ -95,19 +83,18 @@ namespace DiplomenP.Migrations
                     b.Property<string>("OrderDescription")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
                     b.Property<int>("PhoneNumber")
                         .HasColumnType("int");
 
                     b.Property<double>("TotalOrderPrice")
                         .HasColumnType("float");
 
-                    b.HasKey("OrderId");
+                    b.HasKey("OrderCartId", "OrderCustomerId");
 
-                    b.HasIndex("OrderCartId")
-                        .IsUnique();
-
-                    b.HasIndex("OrderCustomerId")
-                        .IsUnique();
+                    b.HasIndex("OrderCustomerId");
 
                     b.ToTable("Orders");
                 });
@@ -372,14 +359,14 @@ namespace DiplomenP.Migrations
                 {
                     b.HasOne("DiplomenP.Models.Cart", "Cart")
                         .WithMany("Items")
-                        .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasForeignKey("CartItemId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("DiplomenP.Models.Product", "CartItemProduct")
-                        .WithOne("CartItems")
-                        .HasForeignKey("DiplomenP.Models.CartItem", "CartItemProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithMany("CartItems")
+                        .HasForeignKey("CartItemProductId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Cart");
@@ -390,15 +377,15 @@ namespace DiplomenP.Migrations
             modelBuilder.Entity("DiplomenP.Models.Order", b =>
                 {
                     b.HasOne("DiplomenP.Models.Cart", "OrderCart")
-                        .WithOne("Order")
-                        .HasForeignKey("DiplomenP.Models.Order", "OrderCartId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .WithMany("Orders")
+                        .HasForeignKey("OrderCartId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("DiplomenP.Models.User", "OrderCustomer")
-                        .WithOne("Order")
-                        .HasForeignKey("DiplomenP.Models.Order", "OrderCustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithMany("Orders")
+                        .HasForeignKey("OrderCustomerId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("OrderCart");
@@ -461,14 +448,12 @@ namespace DiplomenP.Migrations
                 {
                     b.Navigation("Items");
 
-                    b.Navigation("Order")
-                        .IsRequired();
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("DiplomenP.Models.Product", b =>
                 {
-                    b.Navigation("CartItems")
-                        .IsRequired();
+                    b.Navigation("CartItems");
                 });
 
             modelBuilder.Entity("DiplomenP.Models.User", b =>
@@ -476,8 +461,7 @@ namespace DiplomenP.Migrations
                     b.Navigation("Cart")
                         .IsRequired();
 
-                    b.Navigation("Order")
-                        .IsRequired();
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }
