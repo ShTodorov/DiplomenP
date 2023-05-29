@@ -6,5 +6,6 @@ namespace DiplomenP.Interfaces
     {
         Task<Order> CreateOrderAsync(Order newOrder);
         Task<List<Order>> GetOrdersAsync();
+        Task<List<Order>> GetOrdersForUser(string userId);
     }
 }

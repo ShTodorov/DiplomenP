@@ -21,6 +21,15 @@ namespace DiplomenP.Services
             return await _dbContext.Orders.ToListAsync();
         }
 
+        public async Task<List<Order>> GetOrdersForUser(string userId)
+        {
+            // Retrieve products based on the user identifier from the database or another data source
+            var orders = await _dbContext.Orders
+                .Where(p => p.OrderCustomerId == userId)
+                .ToListAsync();
+
+            return orders;
+        }
 
         public async Task<Order> CreateOrderAsync(Order newOrder)
         {

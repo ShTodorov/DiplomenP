@@ -12,9 +12,9 @@
                     color: #BBBBBB;
             }
         </style>
-        <a class="mb-auto mt-auto mx-2" href="Identity/Account/Manage">Hello, @context.User.Identity?.Name!</a>
+        <a class="mb-auto mt-auto mx-2"><!--href="Identity/Account/Manage"--> Здравей, @context.User.Identity?.Name!</a>
         <form method="post" action="Identity/Account/LogOut">
-            <button type="submit" class="nav-link btn btn-link text-dark h-100">Log out</button>
+            <button type="submit" class="nav-link btn btn-link text-dark h-100">Изход</button>
         </form>
     </Authorized>
     <NotAuthorized>
@@ -30,7 +30,7 @@
                  color: #BBBBBB;
             }
         </style>
-        <a class="mb-auto mt-auto mx-2" href="Identity/Account/Register">Register</a>
-        <a class="mb-auto mt-auto mx-2" href="Identity/Account/Login">Log in</a>
+        <a class="mb-auto mt-auto mx-2" href="Identity/Account/Register">Регистрация</a>
+        <a class="mb-auto mt-auto mx-2" href="Identity/Account/Login">Вход</a>
     </NotAuthorized>
 </AuthorizeView>

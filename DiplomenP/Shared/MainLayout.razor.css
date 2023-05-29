@@ -492,7 +492,7 @@ section {
 }
 
 .logo_container {
-    height: 30px !important;
+    height: 100% !important;
 }
 
 .logo {
@@ -502,13 +502,14 @@ section {
     -ms-transform: translateY(-50%);
     -o-transform: translateY(-50%);
     transform: translateY(-50%);
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-    .logo a {
-        font-size: 36px;
-        font-weight: 500;
-        color: #48B924;
-    }
+.logo img {
+    height: 90px !important;
+}
 
 .header_search {
     height: 90px;
@@ -1275,7 +1276,10 @@ select {
 }
 
 @media only screen and (max-width: 767px) {
-    
+
+    .top_bar_contact {
+        display: none;
+    }
 
     .page_menu_search {
         display: block;

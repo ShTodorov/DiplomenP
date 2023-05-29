@@ -12,6 +12,10 @@
 <PageTitle></PageTitle>
 @if (IsUserLogged)
 {
+    if (ValidCount==false)
+    {
+        <p class="text-danger">Броят продукти не е наличен!</p>
+    }
     <section class="py-5">
         <div class="container px-4 px-lg-5 my-5">
             <div class="row gx-4 gx-lg-5 align-items-center">
@@ -64,6 +68,7 @@ else
     private int quantity { get; set; }
     private string? userId;
     private bool IsUserLogged = true;
+    private bool ValidCount = true;
 
     protected override async Task OnInitializedAsync()
     {
@@ -127,10 +132,22 @@ else
     {
         userId = UserService.GetLoggedUserId();
 
+        if (quantity > product.ProductCount)
+        {
+            ValidCount = false;
+        }
+        else
+        {
+            ValidCount = true;
+        }
+
         if(userId != null)
         {
-            await CartService.AddToCart(product.ProductId, quantity, userId);
-            NavigationManager.NavigateTo($"/shopping_cart");
+            if (ValidCount)
+            {
+                await CartService.AddToCart(product.ProductId, quantity, userId);
+                NavigationManager.NavigateTo($"/shopping_cart");
+            }
         }
         else
         {

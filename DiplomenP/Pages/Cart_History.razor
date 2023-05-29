@@ -1,29 +1,71 @@
 ﻿@page "/cart_history"
-
+@using DiplomenP.Interfaces;
+@using DiplomenP.Models;
 <PageTitle>История</PageTitle>
 
-<table class="table">
-    <thead class="thead-light">
-        <tr>
-            <th scope="col">Дата</th>
-            <th scope="col">Имена на продуктите</th>
-            <th scope="col">Заплатена сума</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <th scope="row">12.01</th>
-            <td>Mark, Ivan, Pesho</td>
-            <td>300</td>
-        </tr>
-        <tr>
-            <th scope="row">13.04</th>
-            <td>Jacob, Mitko, Koci</td>
-            <td>1000</td>
-        </tr>
-    </tbody>
-</table>
+<AuthorizeView Roles="Admin">
+    <NotAuthorized>
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Дата</th>
+                    <th scope="col">Заплатена сума</th>
+                </tr>
+            </thead>
+            <tbody>
+                @*
+                @foreach(var order in orders){
+                    <tr>
+                        <th scope="row">@order.OrderDate</th>
+                        <td>@order.TotalOrderPrice</td>
+                    </tr>
+                }
+                *@
+            </tbody>
+        </table>
+    </NotAuthorized>
+    <Authorized>
+        <h3 >Всички поръчки:</h3>
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Дата</th>
+                    <th scope="col">Заплатена сума</th>
+                    <th scope="col">Телефон</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var order in aorders)
+                {
+                    <tr>
+                    <th scope="row">@order.OrderDate</th>
+                    <td>@order.TotalOrderPrice</td>
+                    <td>@order.PhoneNumber</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </Authorized>
+</AuthorizeView>
 
 @code {
+
+    [Inject]
+    private IOrderService OrderService { get; set; }
+
+    //[Inject]
+    //private IUserService UserService { get; set; }
+
+    private List<Order> aorders = new List<Order>();
+    //private List<Order> orders = new List<Order>();
+
+    //private string userId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        aorders = await OrderService.GetOrdersAsync();
+        //userId = UserService.GetLoggedUserId();
+        //orders = OrderService.GetOrdersForUser(userId);
+    }
 
 }

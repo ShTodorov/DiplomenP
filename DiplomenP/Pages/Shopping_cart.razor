@@ -107,7 +107,7 @@
                             <p class="mb-2"><em>Адрес на поръчката:</em></p>
                             <input type="text" class="mb-3 form-control" @bind-value="order.Adress" required>
                             <p class="mb-2"><em>Телефон на получател:</em></p>
-                            <input type="text" class="mb-3 form-control" @bind-value="order.PhoneNumber" required>
+                            <input type="text" class="mb-3 form-control" @bind-value="order.PhoneNumber" required placeholder="+359...">
                             <p class="mb-2"><em>Ако искате да дадете пояснение към поръчката си, може да го напишето в полето отдолу:</em></p>
                             <textarea name="" cols="30" rows="2" class="form-control" @bind="order.OrderDescription"></textarea>
                         </div>
@@ -118,7 +118,7 @@
                             <p class="mb-4"><em>Доставката се изчислява спрямо цената на поръчката.</em></p>
                             <ul class="list-unstyled mb-4">
                                 <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Цена на поръчката</strong><strong>@totalItemsPrice.ToString("0.00") лв.</strong></li>
-                                <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Доставка</strong><strong>@deliveryPrice</strong></li>
+                                <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Доставка</strong><strong>@deliveryPrice лв.</strong></li>
                                 <li class="d-flex justify-content-between py-3 border-bottom">
                                     <strong class="text-muted">Общо</strong>
                                     <h5 class="font-weight-bold">@totalOrderPrice.ToString("0.00") лв.</h5>
@@ -160,7 +160,6 @@ else
     protected override async Task OnInitializedAsync()
     {
         await RefreshData();
-
 
     }
     private async Task RefreshData()

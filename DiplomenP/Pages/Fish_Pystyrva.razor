@@ -100,11 +100,6 @@
         @foreach (var product in products)
         {
 
-            if (product.ProductName == "JMC Fly Fishing SYNERGY мухарка" || product.ProductName == "Мухарска макара JMC Mamba" ||
-            product.ProductName == "Шнур WAVE JMC" || product.ProductName == "Изкуствена муха Goddard Sedge Original" ||
-            product.ProductName == "Дишащ гащеризон JMC Hydrox" || product.ProductName == "Кеп Cortland Teardrop Net Wooden Black Mesh")
-            {
-
                 <div class="col-md-6 col-lg-4 col-xl-3">
 
                     <!-- bbb_deals -->
@@ -136,8 +131,6 @@
 
                 </div>
 
-            }
-
         }
 
     </div>
@@ -155,16 +148,28 @@
     [Inject]
     private IProductService ProductService { get; set; }
 
+    [Inject]
+    private ICartService CartService { get; set; }
+
+    [Inject]
+    private IUserService UserService { get; set; }
+
     private List<Product> products = new List<Product>();
 
     protected override async Task OnInitializedAsync()
     {
-        products = ProductService.GetProducts();
+        products = ProductService.GetProducts().Where(product => product.ProductName == "JMC Fly Fishing SYNERGY мухарка" || product.ProductName == "Мухарска макара JMC Mamba" ||
+            product.ProductName == "Шнур WAVE JMC" || product.ProductName == "Изкуствена муха Goddard Sedge Original" ||
+            product.ProductName == "Дишащ гащеризон JMC Hydrox" || product.ProductName == "Кеп Cortland Teardrop Net Wooden Black Mesh").ToList();
     }
 
-    private void AddComToCart()
+    private async void AddComToCart()
     {
-
+        foreach (var product in products)
+        {
+            await CartService.AddToCart(product.ProductId, 1, UserService.GetLoggedUserId());
+        }
+        this.StateHasChanged();
     }
 
 }

@@ -103,11 +103,6 @@
         @foreach (var product in products)
         {
 
-            if (product.ProductName == "Shimano tribal tx 2 12 325 Въдица" || product.ProductName == "Shimano Ultegra c2000s fc Mакара" ||
-            product.ProductName == "Katran synapse wild carp влакно" || product.ProductName == "Vmc 7132 CT Docan Куки" ||
-            product.ProductName == "ДИП STARBAITS GRAB & GO - Pineapple" || product.ProductName == "Стойка с нивелир за 4 ВЪДИЦИ OSAKO CARP 186")
-            {
-
                 <div class="col-md-6 col-lg-4 col-xl-3">
 
                     <!-- bbb_deals -->
@@ -139,8 +134,6 @@
 
                 </div>
 
-            }
-
         }
 
     </div>
@@ -158,16 +151,28 @@
     [Inject]
     private IProductService ProductService { get; set; }
 
+    [Inject]
+    private ICartService CartService { get; set; }
+
+    [Inject]
+    private IUserService UserService { get; set; }
+
     private List<Product> products = new List<Product>();
 
     protected override async Task OnInitializedAsync()
     {
-        products = ProductService.GetProducts();
+        products = ProductService.GetProducts().Where(product => product.ProductName == "Graphiteleader Argento ux 21gargus" 
+        || product.ProductName == "Shimano stella 10 000sw bpg " ||
+        product.ProductName == "Line system super cast pe x8" || product.ProductName == "Jackson R.A. Pop Попер").ToList();
     }
 
-    private void AddComToCart()
+    private async void AddComToCart()
     {
-
+        foreach (var product in products)
+        {
+            await CartService.AddToCart(product.ProductId, 1, UserService.GetLoggedUserId());
+        }
+        this.StateHasChanged();
     }
 
 }
