@@ -53,18 +53,18 @@
     [Inject]
     private IOrderService OrderService { get; set; }
 
-    //[Inject]
-    //private IUserService UserService { get; set; }
+    [Inject]
+    private IUserService UserService { get; set; }
 
     private List<Order> aorders = new List<Order>();
     //private List<Order> orders = new List<Order>();
 
-    //private string userId;
+    private string userId;
 
     protected override async Task OnInitializedAsync()
     {
         aorders = await OrderService.GetOrdersAsync();
-        //userId = UserService.GetLoggedUserId();
+        userId = UserService.GetLoggedUserId();
         //orders = OrderService.GetOrdersForUser(userId);
     }
 
